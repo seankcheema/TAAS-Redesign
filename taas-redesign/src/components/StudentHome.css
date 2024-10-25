@@ -1,0 +1,116 @@
+/* .ta-assignment-container {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #003366;
+    padding: 15px;
+    color: white;
+  }
+  
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .title {
+    font-size: 1.2rem;
+  }
+  
+  .content {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+  }
+  
+  .apply-section, .my-courses-section, .my-applications-section {
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #003366;
+  }
+  
+  p {
+    margin-bottom: 10px;
+  }
+  
+  a {
+    color: #003366;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .apply-btn {
+    background-color: #003366;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .apply-btn:hover {
+    background-color: #00509e;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table, th, td {
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f5f5f5;
+  }
+  
+  tr:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #003366;
+    color: white;
+    font-size: 0.9rem;
+  }
+  
+  .footer a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .footer-logo {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+   */
