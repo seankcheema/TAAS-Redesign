@@ -1,6 +1,7 @@
 import React from 'react';
 import './StudentHome.css';
 import Header from './Header';
+import Footer from './Footer';
 
 const StudentHome = () => {
   return (
@@ -12,7 +13,7 @@ const StudentHome = () => {
         <div className="apply-section">
           <h2>Apply Now</h2>
           <p>
-            Spring 2025 applications are open now! <a href="#">Due 12/13/2024.</a>
+            Spring 2025 applications are open now! <a>Due 12/13/2024</a>.
           </p>
           <button className="apply-btn">Apply</button>
         </div>
@@ -20,7 +21,7 @@ const StudentHome = () => {
         {/* My Courses Section */}
         <div className="my-courses-section">
           <h2>My Courses</h2>
-          <p>You are currently assigned to <a href="#">COP4600</a>.</p>
+          <p>You are currently assigned to <a>COP4600</a>.</p>
         </div>
 
         {/* My Applications Section */}
@@ -53,16 +54,12 @@ const StudentHome = () => {
             </tbody>
           </table>
         </div>
+        
       </div>
 
-      <footer className="footer">
-        <p>
-          Questions: <a href="mailto:rzhang1@ufl.edu">rzhang1@ufl.edu</a><br />
-          Technical Support: <a href="mailto:consult@cise.ufl.edu">consult@cise.ufl.edu</a>
-        </p>
-        <div className="footer-logo">UNIVERSITY OF FLORIDA</div>
-      </footer>
+      <Footer />
     </div>
+    
   );
 };
 

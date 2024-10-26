@@ -5,10 +5,10 @@ const Header: React.FC = () => {
     return (
         <header className="header">
             <div className="logo">
-                <img src="./assets/UF-logo" alt="Logo" />
+                <img src="./assets/UF-logo.svg" alt="Logo" />
             </div>
             <div className="title">
-                <h1>TA Assignment System</h1>
+                <p>TA Assignment System</p>
             </div>
         </header>
     );

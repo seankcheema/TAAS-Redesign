@@ -1,116 +1,127 @@
-/* .ta-assignment-container {
-    font-family: Arial, sans-serif;
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #003366;
-    padding: 15px;
-    color: white;
-  }
-  
-  .logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
+.body{
+  overflow: visible;
+}
   .title {
     font-size: 1.2rem;
   }
-  
-  .content {
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
+
+  .content{
+    display: flex;
+    justify-content: center; /* Center children horizontally */
+    align-items: center;     /* Center children vertically */
+    flex-direction: column;  /* Optional: arrange children in a column */
+    margin-top: 20px;
   }
   
-  .apply-section, .my-courses-section, .my-applications-section {
-    margin-bottom: 20px;
+  .apply-section {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 125px;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    position: relative;
+    margin-bottom: 30px;
   }
-  
-  h2 {
-    font-size: 1.2rem;
+
+  .my-courses-section {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    height: 125px;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    position: relative;
+    margin-bottom: 30px;
+  }
+
+  .my-applications-section {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    
+    text-align: left;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+h2 {
+    margin-top: 5px;
+    margin-left: 5px;
+    font-size: 1.4rem;
+    margin-bottom: 5px;
+    text-align: left; /* Ensures the title is left-aligned */
+}
+
+.apply-section p, .my-courses-section p {
+    font-size: 1.1rem;
+    margin-left: 20px;
     margin-bottom: 10px;
-    color: #003366;
-  }
-  
-  p {
-    margin-bottom: 10px;
-  }
-  
-  a {
-    color: #003366;
+}
+
+a {
+    color: #365798;
     text-decoration: none;
     font-weight: bold;
-  }
-  
-  a:hover {
+}
+
+.my-applications-section a:hover {
     text-decoration: underline;
-  }
-  
-  .apply-btn {
-    background-color: #003366;
+}
+
+.apply-btn {
+    background-color: #365798;
     color: white;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
     padding: 10px 20px;
+    width: 100px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-  }
-  
-  .apply-btn:hover {
-    background-color: #00509e;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  table, th, td {
-    border: 1px solid #ccc;
-  }
-  
-  th, td {
-    padding: 10px;
-    text-align: left;
-  }
-  
-  th {
-    background-color: #f5f5f5;
-  }
-  
-  tr:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .footer {
-    text-align: center;
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #003366;
-    color: white;
-    font-size: 0.9rem;
-  }
-  
-  .footer a {
-    color: white;
-    text-decoration: none;
-  }
-  
-  .footer a:hover {
-    text-decoration: underline;
-  }
-  
-  .footer-logo {
-    margin-top: 10px;
-    font-size: 1.2rem;
     font-weight: bold;
-  }
-   */
+    font-size: 1rem;
+}
+
+.apply-btn:hover {
+    background-color: #00509e;
+}
+
+table {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 0 auto; /* Centers the table within the container */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f5f5f5;
+}
+
+tr:hover {
+    background-color: #f0f0f0;
+}
+
+  

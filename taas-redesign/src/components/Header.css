@@ -1,7 +1,20 @@
 .header {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Align items vertically in the center */
     background-color: #365798;
     color: white;
-    padding: 20px;
-    text-align: center;
+    padding: 10px;
+    text-align: left;
     border-bottom: 1px solid #e0e0e0;
+}
+
+.logo {
+    margin-right: 15px; /* Space between image and title */
+    margin-bottom: 0px;
+}
+
+.title p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: normal; /* 'regular' isn't valid in CSS */
 }
