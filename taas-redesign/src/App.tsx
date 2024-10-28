@@ -4,6 +4,8 @@ import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import StudentHome from './components/StudentHome';
 import LandingPage from './components/LandingPage';
+import ProfessorHome from './components/ProfessorHome';
+import Course from './components/Course';
 
 
 function App() {
@@ -12,7 +14,9 @@ function App() {
       <div className="App">
         <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<StudentHome />} />
+            <Route path="/student-home" element={<StudentHome />} />
+            <Route path="/professor-home" element={<ProfessorHome />} />
+            <Route path="/course/COP4600" element={<Course />} />
         </Routes>
       </div>
     </Router>

@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
         <p>
         Technical Support: <a href="mailto:consult@cise.ufl.edu">consult@cise.ufl.edu</a>
         </p>
-        <img src="./assets/UF-logo.svg" alt="Logo" />
+        <img src="/assets/UF-logo.svg" alt="Logo" />
       </footer>
     );
 };

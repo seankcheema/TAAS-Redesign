@@ -3,7 +3,7 @@ import './StudentHome.css';
 import Header from './Header';
 import Footer from './Footer';
 
-const StudentHome = () => {
+const StudentHome: React.FC = () =>{
   return (
     <div className="ta-assignment-container">
       <Header />
