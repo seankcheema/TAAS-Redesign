@@ -1,0 +1,13 @@
+.prev-application-container{
+    display: flex;
+      flex-direction: column;
+      width: 75%;
+      background-color: #FFFFFF;
+      padding: 10px;
+      border-radius: 10px;
+      align-items: left;
+      justify-content: left;
+      text-align: left;
+      position: relative;
+      margin-bottom: 30px;
+}

@@ -7,6 +7,7 @@ import LandingPage from './components/LandingPage';
 import ProfessorHome from './components/ProfessorHome';
 import Course from './components/Course';
 import AppReview from './components/AppReview';
+import PrevApplication from './components/PrevApplication';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
             <Route path="/professor-home" element={<ProfessorHome />} />
             <Route path="/course/COP4600" element={<Course />} />
             <Route path="/course/COP4600/review" element={<AppReview />} />
+            <Route path="/applications/fall-2024" element={<PrevApplication />} />
         </Routes>
       </div>
     </Router>

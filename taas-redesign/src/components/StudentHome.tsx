@@ -21,13 +21,13 @@ const StudentHome: React.FC = () =>{
         {/* My Courses Section */}
         <div className="my-courses-section">
           <h2>My Courses</h2>
-          <p>You are currently assigned to <a>COP4600</a>.</p>
+          <p>You are currently assigned to <a href="course/COP4600">COP4600</a>.</p>
         </div>
 
         {/* My Applications Section */}
         <div className="my-applications-section">
           <h2>My Applications</h2>
-          <table>
+          <table className="even-width-table">
             <thead>
               <tr>
                 <th>Semester</th>
@@ -37,7 +37,7 @@ const StudentHome: React.FC = () =>{
             </thead>
             <tbody>
               <tr>
-                <td><a href="#">Fall 2024</a></td>
+                <td><a href="/applications/fall-2024">Fall 2024</a></td>
                 <td>Accepted</td>
                 <td>June 21, 2024</td>
               </tr>
@@ -57,7 +57,7 @@ const StudentHome: React.FC = () =>{
         
       </div>
 
-      <Footer />
+        <Footer />
     </div>
     
   );

@@ -174,8 +174,7 @@ const AppReview: React.FC = () => {
             </button>
             <button 
               className="submit-preferences-btn" 
-              onClick={handleSubmitPreferences} 
-              disabled={!students.every(student => student.priority !== null)} // Enable only if all selections are made
+              onClick={handleSubmitPreferences}
             >
               Submit Preferences
             </button>

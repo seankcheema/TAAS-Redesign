@@ -1,5 +1,8 @@
-.body{
-  overflow: visible;
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
   .title {
     font-size: 1.2rem;
@@ -10,11 +13,17 @@
     justify-content: center; /* Center children horizontally */
     align-items: center;     /* Center children vertically */
     flex-direction: column;  /* Optional: arrange children in a column */
+    flex: 1;
     margin-top: 20px;
+  }
+
+  .ta-assignment-container{
+    min-height: 100vh;
   }
   
   .apply-section {
     display: flex;
+
     flex-direction: column;
     width: 75%;
     height: 125px;
@@ -76,7 +85,7 @@ a {
     font-weight: bold;
 }
 
-.my-applications-section a:hover {
+.my-applications-section a:hover, .my-courses-section a:hover {
     text-decoration: underline;
 }
 
