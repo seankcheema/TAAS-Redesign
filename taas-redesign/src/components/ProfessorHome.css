@@ -126,9 +126,17 @@
       border: 1px solid #ccc;
   }
   
-  th, td {
-      padding: 10px;
-      text-align: center;
+  .even-width-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .even-width-table th,
+  .even-width-table td {
+    width: 33.33%; /* Make each column one-third of the table width */
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd; /* Optional: Adds borders between cells */
   }
   
   th {

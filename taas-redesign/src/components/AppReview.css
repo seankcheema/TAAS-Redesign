@@ -1,0 +1,146 @@
+.content{
+    display: flex;
+    justify-content: center; /* Center children horizontally */
+    align-items: center;     /* Center children vertically */
+    flex-direction: column;  /* Optional: arrange children in a column */
+    margin-top: 20px;
+  }
+
+  .review-applications-section{
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: left;
+    position: relative;
+    margin-bottom: 50px;
+  }
+
+  .review-applications-section a{
+    text-decoration: none;
+    color: #000000;
+    font-weight: normal;
+  }
+
+  .review-applications-section a:hover{
+    text-decoration: underline;
+  }
+
+table {
+    width: 95%;
+    border-collapse: collapse;
+    margin: 0 auto; /* Centers the table within the container */
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+  
+  /* Optional: Additional styles for table layout */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #f5f5f5;
+}
+
+tr:hover {
+    background-color: #f0f0f0;
+}
+
+
+.name-column {
+    width: 8%;
+}
+
+.standing-column {
+    width: 8%;
+}
+
+.email-column {
+    width: 12%;
+}
+
+.gpa-column {
+    width: 6%;
+}
+
+.interests-column {
+    width: 28%;
+}
+
+.travel-column {
+    width: 28%;
+}
+
+.priority-column {
+    width: 10%;
+}
+
+/* Remove max-width to allow dropdown to fully expand */
+.priority-dropdown {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    appearance: none;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+  
+  .priority-dropdown:focus {
+    border-color: #007bff; /* Adds focus color */
+    outline: none;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.5); /* Adds subtle glow on focus */
+  }
+  
+  .priority-dropdown:hover {
+    background-color: #e6e6e6; /* Adds hover color */
+  }
+  
+  .priority-dropdown option {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .buttons-container {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    margin-top: 20px;
+  }
+  
+  .save-preferences-btn,
+  .submit-preferences-btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #365798;
+    color: white;
+  }
+
+  .save-preferences-btn:hover, .submit-preferences-btn:hover {
+    background-color: #00509e;
+}
+  

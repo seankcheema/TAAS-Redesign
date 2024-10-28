@@ -42,8 +42,9 @@ table, th, td {
     border: 1px solid #ccc;
 }
 
-th, td {
+.course-container th, td {
     padding: 10px;
+    width: 50%;
     text-align: center;
 }
 
