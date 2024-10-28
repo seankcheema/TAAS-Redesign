@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import StudentHome from './components/StudentHome';
 import LandingPage from './components/LandingPage';
 import ProfessorHome from './components/ProfessorHome';
+import SystemAdminHome from './components/SystemAdminHome';
 import Course from './components/Course';
 
 
@@ -16,6 +17,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/student-home" element={<StudentHome />} />
             <Route path="/professor-home" element={<ProfessorHome />} />
+            <Route path="/system-admin-home" element={<SystemAdminHome />} />
             <Route path="/course/COP4600" element={<Course />} />
         </Routes>
       </div>

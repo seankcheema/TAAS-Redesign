@@ -1,0 +1,121 @@
+import React from 'react';
+import './SystemAdminHome.css';
+import Header from './Header';
+import Footer from './Footer';
+
+const SystemAdminHome: React.FC = () =>{
+  return (
+    <div className="ta-assignment-container">
+      <Header />
+
+      <div className="content">
+        {/* Apply Now Section */}
+        <div className="apply-section">
+          <h2>Update System</h2>
+          <p>
+            Make changes to the system, including by
+            adding new professors, updating course information, 
+            setting deadline for applications, sending 
+            notifications, and exporting data.
+          </p>
+          <button className="apply-btn">Apply</button>
+        </div>
+
+        {/*Manager:
+-course management (assigning profs to courses)
+-assign students to courses
+-Open application window (set deadline for app, etc.) */}
+
+        {/* My Applications Section */}
+        <div className="my-applications-section">
+          <h2>Manage TA Applications</h2>
+          <p>
+            Update the status of applying students who need action.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Date Added</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Jim Beam</td>
+                <td>Application Approval Needed</td>
+                <td>2:20PM, October 28, 2024</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>John Deer</td>
+                <td>Application Approval Needed</td>
+                <td>2:10PM, October 28, 2024</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Jack Daniels</td>
+                <td>Application Approval Needed</td>
+                <td>1:10PM, October 28, 2024</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            See all TA Applications.
+          </p>
+          <button className="apply-btn">All TA Applications</button>
+        </div>
+
+        {/* My Applications Section */}
+        <div className="my-applications-section">
+          <h2>Professor-Course Assignment</h2>
+          <p>
+          Assign professors to courses that require assignment.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Prefix</th>
+                <th>Title</th>
+                <th>Enrollment</th>
+                <th>Date Added</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>CIS4301</td>
+                <td>Databases</td>
+                <td>100</td>
+                <td>2:10PM, October 28, 2024</td>
+              </tr>
+              <tr>
+                <td>COP4600</td>
+                <td>Operating Systems</td>
+                <td>103</td>
+                <td>2:10PM, October 28, 2024</td>
+              </tr>
+              <tr>
+                <td>COP4533</td>
+                <td>Algorithm Abstraction and Design</td>
+                <td>270</td>
+                <td>2:10PM, October 28, 2024</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            See all professors assignments.
+          </p>
+          <button className="apply-btn">All Professor Assignments</button>
+        </div>
+        
+      </div>
+
+      <Footer />
+    </div>
+    
+  );
+};
+
+export default SystemAdminHome;
