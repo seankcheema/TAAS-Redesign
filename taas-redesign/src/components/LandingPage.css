@@ -35,6 +35,7 @@
 
 .image-container {
     position: relative;
+    width: 100%;
 }
 
 .login-box {

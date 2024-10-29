@@ -33,8 +33,9 @@ const ProfessorHome: React.FC = () =>{
             <p>N/A</p>
         </div>
       </div>
-
+        <div className="footer-container">
         <Footer />
+        </div>
         
       
     </div>

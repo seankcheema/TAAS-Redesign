@@ -16,6 +16,18 @@
     margin-bottom: 30px;
 }
 
+.back-arrow {
+    position: absolute;
+    top: 70px;
+    left: 10px;
+    font-size: 1.5rem;
+    color: #365798;
+}
+
+.back-arrow:hover {
+    cursor: pointer;
+}
+
 .course-container a:hover {
     text-decoration: underline;
 }
@@ -55,11 +67,3 @@ th {
 tr:hover {
     background-color: #f0f0f0;
 }
-
-.footer-container {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-  }

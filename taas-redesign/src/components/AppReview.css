@@ -1,6 +1,5 @@
 .content{
     display: flex;
-    justify-content: center; /* Center children horizontally */
     align-items: center;     /* Center children vertically */
     flex-direction: column;  /* Optional: arrange children in a column */
     margin-top: 20px;
@@ -143,4 +142,7 @@ tr:hover {
   .save-preferences-btn:hover, .submit-preferences-btn:hover {
     background-color: #00509e;
 }
+
+
+
   

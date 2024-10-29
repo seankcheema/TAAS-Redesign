@@ -4,10 +4,16 @@
     .title {
       font-size: 1.2rem;
     }
+
+    .ta-assignment-container {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+  }
+
   
     .content{
       display: flex;
-      justify-content: center; /* Center children horizontally */
       align-items: center;     /* Center children vertically */
       flex-direction: column;  /* Optional: arrange children in a column */
       margin-top: 20px;
@@ -148,9 +154,7 @@
   }
 
   .footer-container {
-    position: fixed;
-    left: 0;
-    bottom: 0;
+    margin-top: auto; /* Pushes footer to the bottom */
     width: 100%;
     text-align: center;
   }
