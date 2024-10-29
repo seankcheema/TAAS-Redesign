@@ -17,6 +17,7 @@ interface Application {
     semester: string;
     status: string;
     dateSubmitted: string;
+    classStanding: string;
 }
 
 const Apply: React.FC = () => {
@@ -33,7 +34,9 @@ const Apply: React.FC = () => {
     semester: 'Spring 2025',
     status: 'In Progress',
     dateSubmitted: '',
-  });
+    classStanding: '', // Initialize class standing
+});
+
 
   const navigate = useNavigate();
 
@@ -104,26 +107,28 @@ const Apply: React.FC = () => {
 
   const importLatestApplication = () => {
     setApplication({
-      semesterAdmitted: 'Summer 2021',
-      graduatingSemester: 'Spring 2025', // Set if applicable
-      ufGpa: '3.85',
-      ufId: '1234-5678',
-      countryOfOrigin: 'United States',
-      coursePreferences: [
-        'COP4600 - Operating Systems',
-        'COP3502C - Programming Fundamentals 1',
-        'CDA3101 - Introduction to Computer Organization',
-        '',
-        '',
-      ],
-      researchInterests: 'I am extremely interested in Linux Kernel development and Operating Systems.',
-      travelPlans: 'N/A',
+        semesterAdmitted: 'Summer 2021',
+        graduatingSemester: 'Spring 2025',
+        ufGpa: '3.85',
+        ufId: '1234-5678',
+        countryOfOrigin: 'United States',
+        coursePreferences: [
+            'COP4600 - Operating Systems',
+            'COP3502C - Programming Fundamentals 1',
+            'CDA3101 - Introduction to Computer Organization',
+            '',
+            '',
+        ],
+        researchInterests: 'I am extremely interested in Linux Kernel development and Operating Systems.',
+        travelPlans: 'N/A',
         submitted: false,
         semester: 'Spring 2025',
         status: 'Under Consideration',
         dateSubmitted: '',
+        classStanding: 'Senior', // Set class standing
     });
-  };
+};
+
 
   const saveApplication = () => {
     // Save to local storage (optional)
@@ -215,6 +220,21 @@ const Apply: React.FC = () => {
                 <option value="Summer 2028">Summer 2028</option>
               </select>
             </div>
+
+            <div className="form-group">
+              <label>Class Standing:</label>
+              <select
+                  value={application.classStanding} // Bind to application state
+                  onChange={(e) => handleInputChange('classStanding', e.target.value)} // Update state accordingly
+              >
+                  <option value="">Select Class Standing</option>
+                  <option value="Freshman">Freshman</option>
+                  <option value="Sophomore">Sophomore</option>
+                  <option value="Junior">Junior</option>
+                  <option value="Senior">Senior</option>
+                  <option value="Graduate">Graduate</option>
+              </select>
+          </div>
 
             <div className="form-group">
               <label>UF GPA:</label>
