@@ -10,7 +10,7 @@ const SystemAdminHome: React.FC = () =>{
 
       <div className="content">
         {/* Apply Now Section */}
-        <div className="apply-section">
+        <div className="update-system-section">
           <h2>Update System</h2>
           <p>
             Make changes to the system, including by
@@ -18,7 +18,12 @@ const SystemAdminHome: React.FC = () =>{
             setting deadline for applications, sending 
             notifications, and exporting data.
           </p>
-          <button className="apply-btn">Apply</button>
+          <div className="button-container">
+                <button className="square-btn">Modify System</button>
+              <button className="square-btn">Add New Professors</button>
+              <button className="square-btn">Update Course Information</button>
+              <button className="square-btn">Sent Notifications</button>
+          </div>
         </div>
 
         {/*Manager:
@@ -26,8 +31,8 @@ const SystemAdminHome: React.FC = () =>{
 -assign students to courses
 -Open application window (set deadline for app, etc.) */}
 
-        {/* My Applications Section */}
-        <div className="my-applications-section">
+        {/* Manage TA Applications Section */}
+        <div className="manage-section">
           <h2>Manage TA Applications</h2>
           <p>
             Update the status of applying students who need action.
@@ -62,14 +67,12 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </tbody>
           </table>
-          <p>
-            See all TA Applications.
-          </p>
-          <button className="apply-btn">All TA Applications</button>
+          <p className="wide-margin-p">See all TA Applications.</p>
+          <button className="wider-btn">All TA Applications</button>
         </div>
 
         {/* My Applications Section */}
-        <div className="my-applications-section">
+        <div className="manage-section">
           <h2>Professor-Course Assignment</h2>
           <p>
           Assign professors to courses that require assignment.
@@ -104,10 +107,8 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </tbody>
           </table>
-          <p>
-            See all professors assignments.
-          </p>
-          <button className="apply-btn">All Professor Assignments</button>
+          <p className="wide-margin-p">See all Professor Assignments.</p>
+          <button className="wider-btn">All Professor Assignments</button>
         </div>
         
       </div>
