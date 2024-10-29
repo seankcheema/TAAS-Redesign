@@ -11,6 +11,9 @@ import AppReview from './components/AppReview';
 import PrevApplication from './components/PrevApplication';
 import ApproveApplication from './components/ApproveApplication';
 import Apply from './components/Apply';
+import AssignStudent from './components/AssignStudent'
+import StudentManager from './components/StudentManager';
+import CourseManager from './components/CourseManager';
 
 
 function App() {
@@ -22,10 +25,13 @@ function App() {
             <Route path="/student-home" element={<StudentHome />} />
             <Route path="/professor-home" element={<ProfessorHome />} />
             <Route path="/system-admin-home" element={<SystemAdminHome />} />
+            <Route path="/student-manager" element={<StudentManager />} />
+            <Route path="/course-manager" element={<CourseManager />} />
             <Route path="/course/COP4600" element={<Course />} />
             <Route path="/course/COP4600/review" element={<AppReview />} />
             <Route path="/applications/fall-2024" element={<PrevApplication />} />
             <Route path="/approve-applications/fall-2024" element={<ApproveApplication />} />
+            <Route path="/assign-student/1" element={<AssignStudent />} />
             <Route path="/apply" element={<Apply />} />
         </Routes>
       </div>

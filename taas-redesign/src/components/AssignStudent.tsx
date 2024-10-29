@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ApproveApplication.css';
+import './AssignStudent.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
@@ -7,17 +7,18 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const ApproveApplication: React.FC = () =>{
+const AssignStudent: React.FC = () =>{
   const navigate = useNavigate();
-  const [status_option, setStatusOption] = useState<string>('');
+  const [course_option, setCourse] = useState<string>('');
 
   const handleBack = () => {
     navigate('/system-admin-home');    
   }
 
-  const status_options = [
-    "Approved", 
-    "Denied",
+  const course_options = [
+    "COP3502C - Programming Fundamentals 1", 
+    "COP4600 - Operating Systems",
+    "CDA3101 - Computer Organization",
   ];
 
   return (
@@ -48,16 +49,51 @@ const ApproveApplication: React.FC = () =>{
             <p><b>Travel plans:</b></p>
             <p>N/A</p>
           </div>
+          <h2><u>Teacher Preferences</u></h2>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Professor's Name</th>
+                <th>Course Prefix</th>
+                <th>Course Name</th>
+                <th>Preference</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Lizzo Zhang</td>
+                <td>COP3502C</td>
+                <td>Programming Fundamentals 1</td>
+                <td>Not interested</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Alex Seguro</td>
+                <td>COP4600</td>
+                <td>Operating Systems</td>
+                <td>Very interested</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Charlize Rossman</td>
+                <td>CDA3101</td>
+                <td>Computer Organization</td>
+                <td>Interested</td>
+              </tr>
+            </tbody>
+          </table>
             <hr className="separator-line" />
             <h2 className="indented-title"><u>Action Required</u></h2> {/* Indented copy */}
             <div className="form-group-sys-add">
               <div className="form-group-wrapper">
-                <label>New Status:</label>
-                <select value={status_option} onChange={(e) => setStatusOption(e.target.value)}>
-                  <option value="">Pending</option>
-                  {status_options.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
+                <label>Course Assignment:</label>
+                <select value={course_option} onChange={(e) => setCourse(e.target.value)}>
+                  <option value=""></option>
+                  {course_options.map((course) => (
+                    <option key={course} value={course}>
+                      {course}
                     </option>
                   ))}
                 </select>
@@ -69,8 +105,7 @@ const ApproveApplication: React.FC = () =>{
               <button className="navigation-btn">Confirm</button>
               <button className="navigation-btn">Next Application</button>
             </div>
-            <p>Note: Please click <b>Confirm</b> after changing the status to make updates.</p>
-            <p>Note: Please click <b>Confirm</b> after changing the status to make updates.</p>
+            <p>Note: Please click <b>Confirm</b> to update the assignment.</p>
         </div>
       </div>
 
@@ -83,4 +118,4 @@ const ApproveApplication: React.FC = () =>{
   );
 };
 
-export default ApproveApplication;
+export default AssignStudent;

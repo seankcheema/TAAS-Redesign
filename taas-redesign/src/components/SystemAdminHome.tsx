@@ -2,8 +2,25 @@ import React from 'react';
 import './SystemAdminHome.css';
 import Header from './Header';
 import Footer from './Footer';
+import { useNavigate } from 'react-router-dom';
 
 const SystemAdminHome: React.FC = () =>{
+  const navigate = useNavigate();
+
+  const handleAllTAs = () => {
+    navigate('/student-manager');    
+  }
+  const handleAllCourses = () => {
+    navigate('/course-manager');    
+  }
+  const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    const firstCellContent = event.currentTarget.querySelector('td')?.textContent;
+    
+    if (firstCellContent) {
+      navigate(`/assign-student/${firstCellContent}`);
+    }
+  };
+
   return (
     <div className="ta-assignment-container">
       <Header />
@@ -47,7 +64,7 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr onClick={handleRowClick}> 
                 <td>1</td>
                 <td>Jim Beam</td>
                 <td>Application Approval Needed</td>
@@ -67,7 +84,7 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </tbody>
           </table>
-          <button className="wider-btn">All TA Applications</button>
+          <button className="wider-btn" onClick={handleAllTAs}>All TA Applications</button>
         </div>
 
         {/* My Applications Section */}
@@ -106,7 +123,7 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </tbody>
           </table>
-          <button className="wider-btn">All Professor Assignments</button>
+          <button className="wider-btn" onClick={handleAllCourses}>All Professor Assignments </button>
         </div>
         
       </div>
