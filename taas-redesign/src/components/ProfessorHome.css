@@ -18,21 +18,7 @@
       flex-direction: column;  /* Optional: arrange children in a column */
       margin-top: 20px;
     }
-    
-    .apply-section {
-      display: flex;
-      flex-direction: column;
-      width: 75%;
-      height: 125px;
-      background-color: #FFFFFF;
-      padding: 10px;
-      border-radius: 10px;
-      align-items: left;
-      justify-content: left;
-      text-align: left;
-      position: relative;
-      margin-bottom: 30px;
-    }
+
   
     .prof-my-courses-section {
       display: flex;
@@ -73,7 +59,7 @@
   .apply-section p, .prof-my-courses-section p {
       font-size: 1.1rem;
       margin-left: 20px;
-      margin-bottom: 10px;
+      margin-bottom: 30px;
   }
   
   a {
