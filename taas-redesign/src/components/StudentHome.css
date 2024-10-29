@@ -84,7 +84,7 @@ a {
     font-weight: bold;
 }
 
-.my-applications-section a:hover, .my-courses-section a:hover {
+.my-applications-section a:hover {
     text-decoration: underline;
 }
 

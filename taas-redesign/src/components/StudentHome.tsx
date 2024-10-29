@@ -4,6 +4,9 @@ import Header from './Header';
 import Footer from './Footer';
 
 const StudentHome: React.FC = () =>{
+  const handleApply = () => {
+    window.location.href = '/apply';
+  }
   return (
     <div className="ta-assignment-container">
       <Header />
@@ -15,13 +18,13 @@ const StudentHome: React.FC = () =>{
           <p>
             Spring 2025 applications are open now! <a>Due 12/13/2024</a>.
           </p>
-          <button className="apply-btn">Apply</button>
+          <button className="apply-btn" onClick={handleApply}>Apply</button>
         </div>
 
         {/* My Courses Section */}
         <div className="my-courses-section">
           <h2>My Courses</h2>
-          <p>You are currently assigned to <a href="course/COP4600">COP4600</a>.</p>
+          <p>You are currently assigned to <a>COP4600</a>.</p>
         </div>
 
         {/* My Applications Section */}
