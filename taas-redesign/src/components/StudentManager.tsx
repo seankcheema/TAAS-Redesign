@@ -14,6 +14,13 @@ const StudentManager: React.FC = () =>{
   const handleBack = () => {
     navigate('/system-admin-home');    
   }
+  const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    const firstCellContent = event.currentTarget.querySelector('td')?.textContent;
+    
+    if (firstCellContent) {
+      navigate(`/assign-student/${firstCellContent}`);
+    }
+  }
 
   return (
     <div className="ta-assignment-container">
@@ -38,7 +45,7 @@ const StudentManager: React.FC = () =>{
               </tr>
             </thead>
             <tbody>
-              <tr>
+              <tr onClick={handleRowClick}>
                 <td>1</td>
                 <td>Jim Beam</td>
                 <td>Undergraduate</td>
