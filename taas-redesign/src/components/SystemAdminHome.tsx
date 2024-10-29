@@ -13,7 +13,7 @@ const SystemAdminHome: React.FC = () =>{
         <div className="update-system-section">
           <h2>Update System</h2>
           <p>
-            Make changes to the system, including by
+            Make changes to the system, including
             adding new professors, updating course information, 
             setting deadline for applications, sending 
             notifications, and exporting data.
@@ -67,7 +67,6 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </tbody>
           </table>
-          <p className="wide-margin-p">See all TA Applications.</p>
           <button className="wider-btn">All TA Applications</button>
         </div>
 
@@ -107,7 +106,6 @@ const SystemAdminHome: React.FC = () =>{
               </tr>
             </tbody>
           </table>
-          <p className="wide-margin-p">See all Professor Assignments.</p>
           <button className="wider-btn">All Professor Assignments</button>
         </div>
         
