@@ -1,0 +1,89 @@
+.prev-application-container{
+    display: flex;
+      flex-direction: column;
+      width: 75%;
+      background-color: #FFFFFF;
+      padding: 10px;
+      border-radius: 10px;
+      align-items: left;
+      justify-content: left;
+      text-align: left;
+      position: relative;
+      margin-bottom: 30px;
+}
+
+h1{
+  text-align: center;
+}
+
+.indented-title {
+  text-indent: 0.4em; /* Adjust this value to set the desired indentation */
+  /* You can also use padding-left instead, if preferred */
+}
+
+.application-info {
+  width: 90%; /* Set width to 90% of the parent container */
+  margin: 0 auto; /* Center the div horizontally */
+  padding: 20px; /* Optional: Add padding for spacing inside the div */
+}
+
+.separator-line {
+  width: 100%; /* Full width of the containing div */
+  border: none;
+  border-top: 2px solid #ccc; /* Adjust thickness and color */
+  margin: 20px 0; /* Optional: Add vertical spacing around the line */
+}
+
+
+.form-group-sys-add {
+  display: flex;
+  justify-content: center; /* Center the wrapper horizontally */
+  align-items: center; /* Center the wrapper vertically if needed */
+  height: 100%; /* Ensure the parent div takes up full height if necessary */
+  margin-bottom: 70px;
+}
+
+.form-group-wrapper {
+  display: flex;
+  align-items: center; /* Align label and dropdown vertically */
+  gap: 15px; /* Increase space between label and dropdown */
+}
+
+.form-group-sys-add label {
+  font-weight: bold;
+  font-size: 1.6em; /* Increase font size of the label */
+  white-space: nowrap; /* Ensure the label stays on one line */
+}
+
+.form-group-sys-add select {
+  padding: 10px; /* Add padding for a larger dropdown */
+  font-size: 1.2em; /* Increase font size of dropdown text */
+  width: 200px; /* Set a wider width for the dropdown */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center; /* Center the buttons horizontally */
+  align-items: center; /* Align buttons vertically within the div */
+  gap: 30px; /* Space between buttons */
+  margin-top: 20px; /* Space above the button group */
+  width: 100%; /* Ensure button group takes full width of its container */
+}
+
+.navigation-btn {
+  padding: 10px 20px; /* Match padding with .import-latest-button */
+  font-size: 1.2em; /* Increase font size to match dropdown */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #365798; /* Button color */
+  color: white;
+  width: 200px; /* Match the width of the dropdown */
+}
+
+.navigation-btn:hover {
+  background-color: #00509e; /* Hover effect */
+}
+

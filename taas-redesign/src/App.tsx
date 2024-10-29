@@ -9,6 +9,7 @@ import SystemAdminHome from './components/SystemAdminHome';
 import Course from './components/Course';
 import AppReview from './components/AppReview';
 import PrevApplication from './components/PrevApplication';
+import ApproveApplication from './components/ApproveApplication';
 import Apply from './components/Apply';
 
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/course/COP4600" element={<Course />} />
             <Route path="/course/COP4600/review" element={<AppReview />} />
             <Route path="/applications/fall-2024" element={<PrevApplication />} />
+            <Route path="/approve-applications/fall-2024" element={<ApproveApplication />} />
             <Route path="/apply" element={<Apply />} />
         </Routes>
       </div>
