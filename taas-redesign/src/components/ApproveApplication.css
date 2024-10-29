@@ -63,12 +63,12 @@ h1{
   border-radius: 4px;
 }
 
-.button-group {
+.nav-button-group {
   display: flex;
   justify-content: center; /* Center the buttons horizontally */
   align-items: center; /* Align buttons vertically within the div */
   gap: 30px; /* Space between buttons */
-  margin-top: 20px; /* Space above the button group */
+  margin-top: 10px; /* Space above the button group */
   width: 100%; /* Ensure button group takes full width of its container */
 }
 
@@ -80,7 +80,7 @@ h1{
   cursor: pointer;
   background-color: #365798; /* Button color */
   color: white;
-  width: 200px; /* Match the width of the dropdown */
+  width: 250px; /* Match the width of the dropdown */
 }
 
 .navigation-btn:hover {

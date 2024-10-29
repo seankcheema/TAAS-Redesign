@@ -26,7 +26,7 @@ const ApproveApplication: React.FC = () =>{
       <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack}/>
       <div className="content">
         <div className='prev-application-container'>
-        <h1>Manage Student Application Status</h1>
+        <h1>Student Application (1/3)</h1>
         <h2 className="indented-title"><u>Application Summary</u></h2> {/* Indented copy */}
           <div className="application-info">
             <h2>Fall 2024 Application</h2>
@@ -63,10 +63,13 @@ const ApproveApplication: React.FC = () =>{
                 </select>
               </div>
             </div>
-            <div className="button-group">
-              <button className="navigation-btn">Go Back</button>
+            <div className="nav-button-group">
+              <button className="navigation-btn">Exit</button>
+              <button className="navigation-btn">Previous Application</button>
               <button className="navigation-btn">Confirm</button>
+              <button className="navigation-btn">Next Application</button>
             </div>
+            <p>Note: Please click <b>Confirm</b> after changing the status to make updates.</p>
         </div>
       </div>
 
