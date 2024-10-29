@@ -97,17 +97,17 @@ const AppReview: React.FC = () => {
     if (savedPreferences) {
       setStudents(JSON.parse(savedPreferences));
     }
-
+  
     // Load application from localStorage
     const savedApplication = localStorage.getItem('applicationData');
     if (savedApplication) {
       const application: Application = JSON.parse(savedApplication);
       
       // Transform Application to Student
-      const student: Student = {
-        id: 4, // Generate or get this dynamically
-        name: 'New App', // Extract if applicable
-        email: 'new_app@ufl.edu', // Extract if applicable
+      const newStudent: Student = {
+        id: 4, // Replace with a dynamic ID generator if needed
+        name: 'New App', // Replace with dynamic extraction if needed
+        email: 'new_app@ufl.edu', // Replace with dynamic extraction if needed
         gpa: parseFloat(application.ufGpa),
         classStanding: application.classStanding,
         graduatingSemester: application.graduatingSemester,
@@ -115,11 +115,17 @@ const AppReview: React.FC = () => {
         travelPlans: application.travelPlans,
         priority: null, // Initialize as null
       };
-
-      // Add the student to the students array
-      setStudents(prevStudents => [...prevStudents, student]);
+  
+      setStudents(prevStudents => {
+        // Check for duplicate entries by email or ID
+        const isDuplicate = prevStudents.some(student => student.id === newStudent.id || student.email === newStudent.email);
+  
+        // Only add newStudent if no duplicates are found
+        return isDuplicate ? prevStudents : [...prevStudents, newStudent];
+      });
     }
   }, []);
+  
 
   const handleSortByGpa = () => {
     const sortedStudents = [...students].sort((a, b) =>
