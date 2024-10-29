@@ -31,7 +31,7 @@ const Apply: React.FC = () => {
     travelPlans: '',
     submitted: false,
     semester: 'Spring 2025',
-    status: 'Under Consideration',
+    status: 'In Progress',
     dateSubmitted: '',
   });
 
@@ -136,6 +136,7 @@ const Apply: React.FC = () => {
     console.log("Submitting application data:", application);
 
     // Save to local storage, mark as submitted
+    application.status = 'Submitted';
     application.dateSubmitted = new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
