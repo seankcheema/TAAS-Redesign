@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './AppReview.css';
 import Header from './Header';
 import Footer from './Footer';
+import { useNavigate } from 'react-router-dom';
 
 interface Student {
   id: number;
@@ -11,10 +12,15 @@ interface Student {
   classStanding: string;
   interests: string;
   travelPlans: string;
-  priority: number | null; // Keep priority as number or null
+  priority: number | null;
 }
 
 const AppReview: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleBack = () => {
+    navigate('/professor-home');    
+  }
   const initialStudents: Student[] = [
     {
       id: 1,
@@ -62,7 +68,16 @@ const AppReview: React.FC = () => {
     'Graduate': 5,
   };
 
-  const priorityOrder: { [key: number]: number } = { 1: 1, 2: 2, 3: 3, 4: 4 }; // Added a higher number for null
+  const priorityOrder: { [key: number]: number } = { 1: 1, 2: 2, 3: 3, 4: 4 };
+
+  useEffect(() => {
+    // Load saved preferences from localStorage
+    const savedPreferences = localStorage.getItem('studentPreferences');
+    if (savedPreferences) {
+      setStudents(JSON.parse(savedPreferences));
+      setPreferencesSaved(true);
+    }
+  }, []);
 
   const handleSortByGpa = () => {
     const sortedStudents = [...students].sort((a, b) =>
@@ -84,7 +99,7 @@ const AppReview: React.FC = () => {
 
   const handleSortByPriority = () => {
     const sortedStudents = [...students].sort((a, b) => {
-      const aPriority = a.priority === null ? 4 : priorityOrder[a.priority]; // Null treated as lowest priority
+      const aPriority = a.priority === null ? 4 : priorityOrder[a.priority];
       const bPriority = b.priority === null ? 4 : priorityOrder[b.priority];
       return prioritySortOrder === 'asc' ? aPriority - bPriority : bPriority - aPriority;
     });
@@ -97,21 +112,20 @@ const AppReview: React.FC = () => {
       student.id === id ? { ...student, priority } : student
     );
     setStudents(updatedStudents);
-    setPreferencesSaved(false); // Mark preferences as unsaved when changes are made
+    setPreferencesSaved(false);
   };
 
   const handleSavePreferences = () => {
-    // Here you would typically save to a backend or local storage
-    console.log("Preferences saved:", students);
-    setPreferencesSaved(true); // Mark preferences as saved
+    localStorage.setItem('studentPreferences', JSON.stringify(students));
+    setPreferencesSaved(true);
     alert("Preferences saved!");
   };
 
   const handleSubmitPreferences = () => {
     if (students.every(student => student.priority !== null)) {
-      // Logic to submit the preferences
-      console.log("Preferences submitted:", students);
+      localStorage.setItem('studentPreferences', JSON.stringify(students));
       alert("Preferences submitted successfully!");
+      navigate('/professor-home');
     } else {
       alert("Please select a priority for all students before submitting.");
     }
@@ -120,6 +134,7 @@ const AppReview: React.FC = () => {
   return (
     <div className="ta-assignment-container">
       <Header />
+      <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack}/>
       <div className="content">
         <div className="review-applications-section">
           <h2>Review Applications</h2>
@@ -182,9 +197,8 @@ const AppReview: React.FC = () => {
           {preferencesSaved}
         </div>
       </div>
-      <div className="footer-container">
+
         <Footer />
-      </div>
     </div>
   );
 };

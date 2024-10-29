@@ -58,6 +58,7 @@ const StudentHome: React.FC = () =>{
       </div>
 
         <Footer />
+
     </div>
     
   );

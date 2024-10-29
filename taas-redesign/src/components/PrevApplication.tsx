@@ -35,6 +35,7 @@ const ProfessorHome: React.FC = () =>{
       </div>
 
         <Footer />
+
         
       
     </div>

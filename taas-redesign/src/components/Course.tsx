@@ -2,11 +2,18 @@ import React from 'react';
 import './Course.css';
 import Header from './Header';
 import Footer from './Footer';
+import { useNavigate } from 'react-router-dom';
 
 const Course: React.FC = () => {
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate('/professor-home');    
+  }
+
   return (
     <div className="ta-assignment-container">
       <Header />
+      <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack}/>
       <div className="content">
         <div className="course-container">
         <h2>COP4600 - Operating Systems</h2>
@@ -42,9 +49,7 @@ const Course: React.FC = () => {
         </div>
       </div>
 
-      <div className="footer-container">
         <Footer />
-        </div>
     </div>
     
   );

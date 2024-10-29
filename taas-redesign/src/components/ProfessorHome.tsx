@@ -56,9 +56,7 @@ const ProfessorHome: React.FC = () =>{
         
       </div>
 
-        <div className="footer-container">
         <Footer />
-        </div>
         
       
     </div>

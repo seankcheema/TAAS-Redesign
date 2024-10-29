@@ -10,7 +10,6 @@ html, body {
 
   .content{
     display: flex;
-    justify-content: center; /* Center children horizontally */
     align-items: center;     /* Center children vertically */
     flex-direction: column;  /* Optional: arrange children in a column */
     flex: 1;
