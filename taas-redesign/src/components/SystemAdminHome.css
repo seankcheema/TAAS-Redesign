@@ -58,7 +58,7 @@
       flex-direction: column;
       width: 75%;
       background-color: #FFFFFF;
-      padding: 20px;
+      padding: 10px;
       border-radius: 10px;
       
       text-align: left;
@@ -132,6 +132,7 @@
     padding: 5px;
     width: 100%; /* Adjust based on your layout */
     height: 200px; /* Adjust based on your design needs */
+    gap: 10px;
 }
 
 .square-btn {
