@@ -136,7 +136,11 @@ const Apply: React.FC = () => {
     console.log("Submitting application data:", application);
 
     // Save to local storage, mark as submitted
-    application.dateSubmitted = new Date().toLocaleDateString();
+    application.dateSubmitted = new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });    
     const applicationData = { ...application, submitted: true };
     localStorage.setItem('applicationData', JSON.stringify(applicationData));
 
