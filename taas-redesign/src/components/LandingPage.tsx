@@ -26,9 +26,7 @@ const LandingPage: React.FC = () => {
                     The TA Assignment System (TAAS) is a system where students can apply to TA positions within the CISE department and educators can select their TAs for their courses.
                 </p>
             </div>
-            <div className='footer-container'>
             <Footer />
-            </div>
         </div>
     );
 };

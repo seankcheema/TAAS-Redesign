@@ -49,9 +49,7 @@ const Course: React.FC = () => {
         </div>
       </div>
 
-      <div className="footer-container">
         <Footer />
-        </div>
     </div>
     
   );
