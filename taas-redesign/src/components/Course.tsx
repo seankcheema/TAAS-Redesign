@@ -7,7 +7,6 @@ const Course: React.FC = () => {
   return (
     <div className="ta-assignment-container">
       <Header />
-
       <div className="content">
         <div className="course-container">
         <h2>COP4600 - Operating Systems</h2>
