@@ -10,9 +10,26 @@ interface Student {
   email: string;
   gpa: number;
   classStanding: string;
+  graduatingSemester: string; // Include graduatingSemester in the interface
   interests: string;
   travelPlans: string;
   priority: number | null;
+}
+
+interface Application {
+  semesterAdmitted: string;
+  graduatingSemester: string;
+  ufGpa: string;
+  ufId: string;
+  countryOfOrigin: string;
+  coursePreferences: string[];
+  researchInterests: string;
+  travelPlans: string;
+  submitted?: boolean;
+  semester: string;
+  status: string;
+  dateSubmitted: string;
+  classStanding: string;
 }
 
 const AppReview: React.FC = () => {
@@ -21,6 +38,7 @@ const AppReview: React.FC = () => {
   const handleBack = () => {
     navigate('/professor-home');    
   }
+  
   const initialStudents: Student[] = [
     {
       id: 1,
@@ -28,6 +46,7 @@ const AppReview: React.FC = () => {
       email: 'student1@ufl.edu',
       gpa: 3.8,
       classStanding: 'Junior',
+      graduatingSemester: 'Spring 2026', // Add graduatingSemester for each student
       interests: 'Machine Learning, Data Science',
       travelPlans: 'N/A',
       priority: null,
@@ -38,6 +57,7 @@ const AppReview: React.FC = () => {
       email: 'student2@ufl.edu',
       gpa: 3.5,
       classStanding: 'Senior',
+      graduatingSemester: 'Spring 2025', // Add graduatingSemester for each student
       interests: 'Software Engineering, Security',
       travelPlans: 'Going home for Thanksgiving and a 3 day trip to Miami',
       priority: null,
@@ -48,6 +68,7 @@ const AppReview: React.FC = () => {
       email: 'student3@ufl.edu',
       gpa: 3.3,
       classStanding: 'Sophomore',
+      graduatingSemester: 'Fall 2026', // Add graduatingSemester for each student
       interests: 'Software Engineering, Security',
       travelPlans: 'N/A',
       priority: null,
@@ -71,11 +92,32 @@ const AppReview: React.FC = () => {
   const priorityOrder: { [key: number]: number } = { 1: 1, 2: 2, 3: 3, 4: 4 };
 
   useEffect(() => {
-    // Load saved preferences from localStorage
+    // Load saved student preferences from localStorage
     const savedPreferences = localStorage.getItem('studentPreferences');
     if (savedPreferences) {
       setStudents(JSON.parse(savedPreferences));
-      setPreferencesSaved(true);
+    }
+
+    // Load application from localStorage
+    const savedApplication = localStorage.getItem('applicationData');
+    if (savedApplication) {
+      const application: Application = JSON.parse(savedApplication);
+      
+      // Transform Application to Student
+      const student: Student = {
+        id: 4, // Generate or get this dynamically
+        name: 'New App', // Extract if applicable
+        email: 'new_app@ufl.edu', // Extract if applicable
+        gpa: parseFloat(application.ufGpa),
+        classStanding: application.classStanding,
+        graduatingSemester: application.graduatingSemester,
+        interests: application.researchInterests,
+        travelPlans: application.travelPlans,
+        priority: null, // Initialize as null
+      };
+
+      // Add the student to the students array
+      setStudents(prevStudents => [...prevStudents, student]);
     }
   }, []);
 
@@ -149,6 +191,7 @@ const AppReview: React.FC = () => {
                 <th className="standing-column" onClick={handleSortByStanding}>
                   Class Standing {standingSortOrder === 'asc' ? '▲' : '▼'}
                 </th>
+                <th className="semester-column">Graduating Semester</th> {/* New column for graduating semester */}
                 <th className="interests-column">Interests</th>
                 <th className="travel-column">Travel Plans</th>
                 <th className="priority-column" onClick={handleSortByPriority}>
@@ -165,6 +208,7 @@ const AppReview: React.FC = () => {
                   </td>
                   <td className="gpa-column">{student.gpa.toFixed(2)}</td>
                   <td className="standing-column">{student.classStanding}</td>
+                  <td className="semester-column">{student.graduatingSemester}</td> {/* Display graduating semester */}
                   <td className="interests-column">{student.interests}</td>
                   <td className="travel-column">{student.travelPlans}</td>
                   <td className="priority-column">
@@ -173,7 +217,7 @@ const AppReview: React.FC = () => {
                       value={student.priority ?? ''}
                       onChange={(e) => handlePriorityChange(student.id, e.target.value ? parseInt(e.target.value) : null)}
                     >
-                      <option value="">Select Priority</option>
+                      <option value="">Select</option>
                       <option value="1">1 - High</option>
                       <option value="2">2 - Medium</option>
                       <option value="3">3 - Low</option>
@@ -198,7 +242,7 @@ const AppReview: React.FC = () => {
         </div>
       </div>
 
-        <Footer />
+      <Footer />
     </div>
   );
 };
