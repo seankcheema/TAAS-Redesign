@@ -1,9 +1,22 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import './StudentHome.css';
 import Header from './Header';
 import Footer from './Footer';
 
 const StudentHome: React.FC = () =>{
+  const [applicationSubmitted, setApplicationSubmitted] = useState<boolean>(false);
+
+  useEffect(() => {
+      // Check local storage or context for submitted application status
+      const applicationData = localStorage.getItem('applicationData');
+      if (applicationData) {
+          const application = JSON.parse(applicationData);
+          if (application.submitted) { // Assuming your application has a 'submitted' field
+              setApplicationSubmitted(true);
+          }
+      }
+  }, []);
+
   const handleApply = () => {
     window.location.href = '/apply';
   }
@@ -14,12 +27,16 @@ const StudentHome: React.FC = () =>{
       <div className="content">
         {/* Apply Now Section */}
         <div className="apply-section">
-          <h2>Apply Now</h2>
-          <p>
-            Spring 2025 applications are open now! <a>Due 12/13/2024</a>.
-          </p>
-          <button className="apply-btn" onClick={handleApply}>Apply</button>
-        </div>
+                <h2>Apply Now</h2>
+                <p>
+                    {applicationSubmitted
+                        ? "Your application has been submitted! You can review or edit it until the due date (12/13/2024)."
+                        : "Spring 2025 applications are open now! Due 12/13/2024."}
+                </p>
+                <button className="apply-btn" onClick={handleApply}>
+                    {applicationSubmitted ? "Review/Edit Application" : "Apply"}
+                </button>
+            </div>
 
         {/* My Courses Section */}
         <div className="my-courses-section">

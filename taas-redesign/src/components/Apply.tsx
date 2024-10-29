@@ -1,18 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Apply.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
 
+interface Application {
+    semesterAdmitted: string;
+    graduatingSemester: string;
+    ufGpa: string;
+    ufId: string;
+    countryOfOrigin: string;
+    coursePreferences: string[];
+    researchInterests: string;
+    travelPlans: string;
+    submitted?: boolean;
+    semester: string;
+    status: string;
+    dateSubmitted: string;
+}
+
 const Apply: React.FC = () => {
-  const [semesterAdmitted, setSemesterAdmitted] = useState<string>('');
-  const [graduatingSemester, setGraduatingSemester] = useState<string>('');
-  const [ufGpa, setUfGpa] = useState<string>('');
-  const [ufId, setUfId] = useState<string>('');
-  const [countryOfOrigin, setCountryOfOrigin] = useState<string>('');
-  const [coursePreferences, setCoursePreferences] = useState<string[]>(['', '', '', '', '']);
-  const [researchInterests, setResearchInterests] = useState<string>('');
-  const [travelPlans, setTravelPlans] = useState<string>('');
+  const [application, setApplication] = useState<Application>({
+    semesterAdmitted: '',
+    graduatingSemester: '',
+    ufGpa: '',
+    ufId: '',
+    countryOfOrigin: '',
+    coursePreferences: Array(5).fill(''),
+    researchInterests: '',
+    travelPlans: '',
+    submitted: false,
+    semester: 'Spring 2025',
+    status: 'Under Consideration',
+    dateSubmitted: '',
+  });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Load application data from local storage on component mount
+    const savedApplication = localStorage.getItem('applicationData');
+    if (savedApplication) {
+        const parsedApplication = JSON.parse(savedApplication);
+        setApplication(parsedApplication);
+    }
+}, []);
 
   const countries = [
     "United States", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia",
@@ -55,57 +87,91 @@ const Apply: React.FC = () => {
   ];
 
   const handleCoursePreferenceChange = (index: number, value: string) => {
-    const updatedPreferences = [...coursePreferences];
+    const updatedPreferences = [...application.coursePreferences];
     updatedPreferences[index] = value;
-    setCoursePreferences(updatedPreferences);
+    setApplication((prev) => ({
+      ...prev,
+      coursePreferences: updatedPreferences,
+    }));
   };
 
-  const navigate = useNavigate();
-
-  const handleBack = () => {
-    navigate('/student-home');    
-  }
-
-  const availableCourses = (selectedIndex: number) =>
-    ciseCourses.filter((course) => !coursePreferences.includes(course) || coursePreferences[selectedIndex] === course);
+  const handleInputChange = (key: keyof Application, value: string) => {
+    setApplication((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
   const importLatestApplication = () => {
-    setSemesterAdmitted('Summer 2021');
-    setGraduatingSemester('Spring 2025');
-    setUfGpa('3.85');
-    setUfId('1234-5678');
-    setCountryOfOrigin('United States of America');
-    setCoursePreferences(['COP4600 - Operating Systems', 'COP3502C - Programming Fundamentals 1', 'CDA3101 - Introduction to Computer Organization', '', '']);
-    setResearchInterests('I am extremely interested in Linux Kernel development and Operating Systems.');
-    setTravelPlans('N/A');
+    setApplication({
+      semesterAdmitted: 'Summer 2021',
+      graduatingSemester: 'Spring 2025', // Set if applicable
+      ufGpa: '3.85',
+      ufId: '1234-5678',
+      countryOfOrigin: 'United States',
+      coursePreferences: [
+        'COP4600 - Operating Systems',
+        'COP3502C - Programming Fundamentals 1',
+        'CDA3101 - Introduction to Computer Organization',
+        '',
+        '',
+      ],
+      researchInterests: 'I am extremely interested in Linux Kernel development and Operating Systems.',
+      travelPlans: 'N/A',
+        submitted: false,
+        semester: 'Spring 2025',
+        status: 'Under Consideration',
+        dateSubmitted: '',
+    });
   };
 
   const saveApplication = () => {
-    // Logic to save application (e.g., save to local storage or database)
-    alert("Application saved!");
+    // Save to local storage (optional)
+    localStorage.setItem('applicationData', JSON.stringify(application));
+    alert('Application saved!'); // Notify user
   };
 
   const submitApplication = () => {
-    // Logic to submit application (e.g., send to server)
-    alert("Application submitted successfully!");
+    // Here you can send application to your server
+    console.log("Submitting application data:", application);
+
+    // Save to local storage, mark as submitted
+    application.dateSubmitted = new Date().toLocaleDateString();
+    const applicationData = { ...application, submitted: true };
+    localStorage.setItem('applicationData', JSON.stringify(applicationData));
+
+    alert("Application submitted successfully!"); // Notify user
+
+    // Optionally, you can navigate back to the StudentHome after submission
+    navigate('/student-home');
+
+    handleBack();
+};
+
+
+  const availableCourses = (selectedIndex: number) =>
+    ciseCourses.filter((course) => !application.coursePreferences.includes(course) || application.coursePreferences[selectedIndex] === course);
+
+  const handleBack = () => {
+    navigate('/student-home');
   };
 
   return (
     <div className="ta-assignment-container">
       <Header />
-        <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack}/>
+      <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack} />
       <div className="content">
         <div className="application-container">
           <h2>Spring 2025 Application</h2>
           <button className="import-latest-button" onClick={importLatestApplication}>Import Latest Application</button>
-          
+
           <form className="application-form">
-          <div className="form-group">
-            <label>Semester Admitted:</label>
-            <select
-                value={semesterAdmitted}
-                onChange={(e) => setSemesterAdmitted(e.target.value)}
-            >
+            <div className="form-group">
+              <label>Semester Admitted:</label>
+              <select
+                value={application.semesterAdmitted}
+                onChange={(e) => handleInputChange('semesterAdmitted', e.target.value)}
+              >
                 <option value="">Select Semester</option>
                 <option value="Fall 2024">Fall 2024</option>
                 <option value="Summer 2024">Summer 2024</option>
@@ -121,55 +187,57 @@ const Apply: React.FC = () => {
                 <option value="Spring 2021">Spring 2021</option>
                 <option value="Fall 2020">Fall 2020</option>
                 <option value="Summer 2020">Summer 2020</option>
-            </select>
+              </select>
             </div>
 
             <div className="form-group">
-                <label>Graduating Semester:</label>
-                <select
-                    value={graduatingSemester} // Assuming you have a state for this
-                    onChange={(e) => setGraduatingSemester(e.target.value)} // Update the state accordingly
-                >
-                    <option value="">Select Graduating Semester</option>
-                    <option value="Spring 2025">Spring 2025</option>
-                    <option value="Summer 2025">Summer 2025</option>
-                    <option value="Fall 2025">Fall 2025</option>
-                    <option value="Spring 2026">Spring 2026</option>
-                    <option value="Summer 2026">Summer 2026</option>
-                    <option value="Fall 2026">Fall 2026</option>
-                    <option value="Spring 2027">Spring 2027</option>
-                    <option value="Summer 2027">Summer 2027</option>
-                    <option value="Fall 2027">Fall 2027</option>
-                    <option value="Spring 2028">Spring 2028</option>
-                    <option value="Summer 2028">Summer 2028</option>
-                </select>
-                </div>
+              <label>Graduating Semester:</label>
+              <select
+                value={application.graduatingSemester} // Adjusted to use application state
+                onChange={(e) => handleInputChange('graduatingSemester', e.target.value)} // Update the state accordingly
+              >
+                <option value="">Select Graduating Semester</option>
+                <option value="Spring 2025">Spring 2025</option>
+                <option value="Summer 2025">Summer 2025</option>
+                <option value="Fall 2025">Fall 2025</option>
+                <option value="Spring 2026">Spring 2026</option>
+                <option value="Summer 2026">Summer 2026</option>
+                <option value="Fall 2026">Fall 2026</option>
+                <option value="Spring 2027">Spring 2027</option>
+                <option value="Summer 2027">Summer 2027</option>
+                <option value="Fall 2027">Fall 2027</option>
+                <option value="Spring 2028">Spring 2028</option>
+                <option value="Summer 2028">Summer 2028</option>
+              </select>
+            </div>
 
-            
             <div className="form-group">
               <label>UF GPA:</label>
               <input
                 type="text"
-                value={ufGpa}
-                onChange={(e) => setUfGpa(e.target.value)}
+                value={application.ufGpa}
+                onChange={(e) => handleInputChange('ufGpa', e.target.value)}
                 maxLength={4}
               />
             </div>
-            
+
             <div className="form-group">
               <label>UF ID: XXXX-XXXX</label>
               <input
                 type="text"
-                value={ufId}
-                onChange={(e) => setUfId(e.target.value)}
+                value={application.ufId}
+                onChange={(e) => handleInputChange('ufId', e.target.value)}
                 placeholder="XXXX-XXXX"
                 maxLength={9}
               />
             </div>
-            
+
             <div className="form-group">
               <label>Country of Origin:</label>
-              <select value={countryOfOrigin} onChange={(e) => setCountryOfOrigin(e.target.value)}>
+              <select
+                value={application.countryOfOrigin}
+                onChange={(e) => handleInputChange('countryOfOrigin', e.target.value)}
+              >
                 <option value="">Select Country</option>
                 {countries.map((country) => (
                   <option key={country} value={country}>
@@ -178,13 +246,13 @@ const Apply: React.FC = () => {
                 ))}
               </select>
             </div>
-            
+
             <div className="form-group">
               <label>Course Preferences:</label>
-              {[0, 1, 2, 3, 4].map((i) => (
+              {application.coursePreferences.map((preference, i) => (
                 <select
                   key={i}
-                  value={coursePreferences[i]}
+                  value={preference}
                   onChange={(e) => handleCoursePreferenceChange(i, e.target.value)}
                 >
                   <option value="">Select #{i + 1} Course Preference</option>
@@ -196,34 +264,32 @@ const Apply: React.FC = () => {
                 </select>
               ))}
             </div>
-            
+
             <div className="form-group">
               <label>Research Area/Teaching Interests:</label>
               <textarea
-                value={researchInterests}
-                onChange={(e) => setResearchInterests(e.target.value)}
+                value={application.researchInterests}
+                onChange={(e) => handleInputChange('researchInterests', e.target.value)}
                 maxLength={150}
               />
-              <small>{150 - researchInterests.length} characters remaining</small>
+              <small>{150 - application.researchInterests.length} characters remaining</small>
             </div>
-            
+
             <div className="form-group">
               <label>Travel Plans (N/A if none):</label>
               <textarea
-                value={travelPlans}
-                onChange={(e) => setTravelPlans(e.target.value)}
+                value={application.travelPlans}
+                onChange={(e) => handleInputChange('travelPlans', e.target.value)}
                 maxLength={150}
               />
-              <small>{150 - travelPlans.length} characters remaining</small>
+              <small>{150 - application.travelPlans.length} characters remaining</small>
             </div>
           </form>
           <div className="button-group">
-              <button className="save-preferences-btn" onClick={saveApplication}>Save Application</button>
-              <button className="submit-preferences-btn" onClick={submitApplication}>Submit Application</button>
+            <button className="save-preferences-btn" onClick={saveApplication}>Save Application</button>
+            <button className="submit-preferences-btn" onClick={submitApplication}>Submit Application</button>
+          </div>
         </div>
-        </div>
-
-        
       </div>
 
       <Footer />

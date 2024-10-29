@@ -25,7 +25,7 @@ const ProfessorHome: React.FC = () =>{
             <p><b>Graduating Semester:</b> Spring 2025</p>
             <p><b>UF GPA:</b> 3.85</p>
             <p><b>UF ID:</b> 1234-5678</p>
-            <p><b>Country of Origin:</b> United States of America</p>
+            <p><b>Country of Origin:</b> United States</p>
             <p><b>Course Preferences:</b></p>
             <p><b>1)</b> COP4600 - Operating Systems</p>
             <p><b>2)</b> COP3502C - Programming Fundamentals 1</p>
