@@ -4,7 +4,7 @@ import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
 
-interface Application {
+export interface Application {
     semesterAdmitted: string;
     graduatingSemester: string;
     ufGpa: string;

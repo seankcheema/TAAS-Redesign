@@ -49,7 +49,7 @@ const StudentManager: React.FC = () =>{
                 <td>1</td>
                 <td>Jim Beam</td>
                 <td>Undergraduate</td>
-                <td>Application Approval Needed</td>
+                <td>Course Assignment Needed</td>
                 <td>2:20PM, October 28, 2024</td>
               </tr>
               <tr>
