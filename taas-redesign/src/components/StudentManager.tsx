@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './StudentManager.css';
 import Header from './Header';
 import Footer from './Footer';
@@ -10,11 +10,25 @@ import { useNavigate } from 'react-router-dom';
 const StudentManager: React.FC = () =>{
   const navigate = useNavigate();
   const [course_option, setCourse] = useState<string>('');
+  const [applications, setApplications] = useState<any[]>([]); // Adjust type as necessary
+
+  useEffect(() => {
+    // Load application data from localStorage on initial render
+    const storedApplications = localStorage.getItem('urgentapplications');
+    if (storedApplications) {
+      const parsedApplications = JSON.parse(storedApplications);
+      setApplications(parsedApplications); // Update state with the loaded applications
+    }
+  }, []);
 
   const handleBack = () => {
     navigate('/system-admin-home');    
   }
   const handleRowClick = (event: React.MouseEvent<HTMLTableRowElement>) => {
+    const table = event.currentTarget.closest('table'); 
+    const rowCount = (Number(table?.querySelectorAll('tbody tr').length)) || 0; // Count rows in <tbody> only to exclude header
+    localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
+
     const firstCellContent = event.currentTarget.querySelector('td')?.textContent;
     
     if (firstCellContent) {
@@ -45,27 +59,15 @@ const StudentManager: React.FC = () =>{
               </tr>
             </thead>
             <tbody>
-              <tr onClick={handleRowClick}>
-                <td>1</td>
-                <td>Jim Beam</td>
-                <td>Undergraduate</td>
-                <td>Course Assignment Needed</td>
-                <td>2:20PM, October 28, 2024</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>John Deer</td>
-                <td>Undergraduate</td>
-                <td>Application Approval Needed</td>
-                <td>2:10PM, October 28, 2024</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Jack Daniels</td>
-                <td>Undergraduate</td>
-                <td>Application Approval Needed</td>
-                <td>1:10PM, October 28, 2024</td>
-              </tr>
+            {applications.map((application, index) => (
+            <tr onClick = {handleRowClick} key={index}>
+              <td>{index + 1}</td> {/* Display index starting from 1 */}
+              <td>{application.student_name}</td>
+              <td>Undergraduate</td>
+              <td>{application.student_status}</td>
+              <td>{application.date_added}</td>
+            </tr>
+          ))}
             </tbody>
           </table>
         </div>
