@@ -21,13 +21,15 @@ const AssignStudent: React.FC = () =>{
     "CDA3101 - Computer Organization",
   ];
 
+  const tableEntryCount = localStorage.getItem('currentTableEntryCount');
+
   return (
     <div className="ta-assignment-container">
       <Header />
       <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack}/>
       <div className="content">
         <div className='prev-application-container'>
-        <h1>Student Application (1/3)</h1>
+        <h1>Student Application (1/{tableEntryCount})</h1>
         <h2 className="indented-title"><u>Application Summary</u></h2> {/* Indented copy */}
           <div className="application-info">
             <h2>Fall 2024 Application</h2>
