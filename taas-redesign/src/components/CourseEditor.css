@@ -1,0 +1,96 @@
+.application-container{
+    display: flex;
+      flex-direction: column;
+      width: 75%;
+      background-color: #FFFFFF;
+      padding: 10px;
+      border-radius: 10px;
+      align-items: left;
+      justify-content: left;
+      text-align: left;
+      position: relative;
+      margin-bottom: 30px;
+}
+
+.application-form{
+    margin-left: 20px;
+    margin-top: 20px;
+    position: relative;
+    padding-bottom: 3rem;
+}
+
+.form-group{
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label{
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 5px; 
+}
+
+input,
+select,
+textarea {
+  padding: 0.5rem;
+  font-size: .8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 50%;
+  max-width: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+textarea {
+  resize: vertical;
+}
+
+small {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+.extra-space {
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+.table-group {
+    display: flex;
+    margin-top: 50px;
+    margin-bottom: 0.1em;
+    align-items: center;
+  }
+  
+  .import-latest-button {
+    position: absolute;
+    padding: 10px 20px;
+    top: 20px;
+    right: 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #365798;
+    color: white;
+  }
+  
+  .import-latest-button:hover {
+    background-color: #00509e;
+}
+
+  
+  .button-group {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+  }
+  
