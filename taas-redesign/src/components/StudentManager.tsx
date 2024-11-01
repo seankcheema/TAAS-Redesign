@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 
 const StudentManager: React.FC = () =>{
   const navigate = useNavigate();
-  const [course_option, setCourse] = useState<string>('');
   const [applications, setApplications] = useState<any[]>([]); // Adjust type as necessary
 
   useEffect(() => {

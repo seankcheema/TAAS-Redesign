@@ -11,6 +11,32 @@ export interface UrgentApplication {
   date_added: string;
 }
 
+export interface Course {
+  prefix: string;
+  title: string;
+  professors_assigned: string;
+  tas_assigned: string;
+  enrollment: number;
+  date_added: string;
+}
+
+// <td><th>Prefix</th>
+// <td><th>Title</th>
+// <td><th>Enrollment</th>
+// <td><th>Date Added</th>
+// </tr>
+// <tr>
+// <td>COP4600</td>
+// <td>Operating Systems</td>
+// <td>103</td>
+// <td>2:10PM, October 28, 2024</td>
+// </tr>
+// <tr>
+// <td>COP4533</td>
+// <td>Algorithm Abstraction and Design</td>
+// <td>270</td>
+// <td>2:10PM, October 28, 2024</td>
+
 const SystemAdminHome: React.FC = () => {
   const [urgentapplications, setApplications] = useState<UrgentApplication[]>(() => {
     // Retrieve applications from localStorage or use default values
@@ -24,12 +50,23 @@ const SystemAdminHome: React.FC = () => {
     ];
   });
 
+  const [courses, setCourses] = useState<Course[]>(() => {
+    // Retrieve applications from localStorage or use default values
+    const courses = localStorage.getItem('courses');
+    return courses ? JSON.parse(courses) : [
+      { prefix: "CIS4301", title: "Databases", professors_assigned: "", tas_assigned: "", enrollment: 110, date_added: "2:20PM, October 28, 2024" },
+      { prefix: "COT3100", title: "Discrete Math", professors_assigned: "", tas_assigned: "", enrollment: 250, date_added: "2:10PM, October 28, 2024" },
+      { prefix: "COP4600", title: "Operating Systems", professors_assigned: "Alexis Seguro", tas_assigned: "", enrollment: 110, date_added: "2:20PM, October 28, 2024" },
+    ];
+  });
+
   const navigate = useNavigate();
 
   useEffect(() => {
     // Store applications in localStorage whenever they change
     localStorage.setItem('urgentapplications', JSON.stringify(urgentapplications));
-  }, [urgentapplications]);
+    localStorage.setItem('courses', JSON.stringify(courses));
+  }, [urgentapplications, courses]);
 
   const handleAllTAs = () => {
     navigate('/student-manager');    
@@ -39,15 +76,30 @@ const SystemAdminHome: React.FC = () => {
     navigate('/course-manager');    
   };
 
-  const handleRowClick = (index: number) => {
-    const rowCount = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected").length;
-    localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
-
-    navigate(`/approve-applications/${index + 1}`); // Use index + 1 for the route
-  };
-
   // Filter applications to exclude Approved and Rejected statuses
   const filteredApplications = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
+  const filteredCourses = courses.filter(course => course.professors_assigned === "");
+
+  const handleRowClick = (index: number, tableType: "applications" | "courses", value: string) => {
+    if (tableType === "applications") {
+      const selectedApplications = urgentapplications.filter(app => app.student_name === value);
+      localStorage.setItem("currentApplication", JSON.stringify(selectedApplications[0]));
+
+      const rowCount = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected").length;
+      localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
+      navigate(`/approve-applications/${index + 1}`); // Use index + 1 for the route
+    } else if (tableType === "courses"){
+      const selectedCourses = courses.filter(course => course.title === value);
+      localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
+
+      const rowCount = courses.filter(course => course.professors_assigned === "").length;
+      localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
+      localStorage.setItem("currentRow", (index + 1).toString()); // Store the count in localStorage
+      navigate(`/course-editor/`); // Use index + 1 for the route
+    }
+  };
+
+  
 
   return (
     <div className="ta-assignment-container">
@@ -86,7 +138,7 @@ const SystemAdminHome: React.FC = () => {
             </thead>
             <tbody>
               {filteredApplications.map((application, index) => (
-                <tr key={index} onClick={() => handleRowClick(index)}> 
+                <tr key={index} onClick={() => handleRowClick(index, "applications", application.student_name)}> 
                   <td>{index + 1}</td> {/* Display index starting from 1 */}
                   <td>{application.student_name}</td>
                   <td>{application.student_status}</td>
@@ -107,6 +159,7 @@ const SystemAdminHome: React.FC = () => {
           <table>
             <thead>
               <tr>
+                <th>#</th>
                 <th>Prefix</th>
                 <th>Title</th>
                 <th>Enrollment</th>
@@ -114,24 +167,15 @@ const SystemAdminHome: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>CIS4301</td>
-                <td>Databases</td>
-                <td>100</td>
-                <td>2:10PM, October 28, 2024</td>
-              </tr>
-              <tr>
-                <td>COP4600</td>
-                <td>Operating Systems</td>
-                <td>103</td>
-                <td>2:10PM, October 28, 2024</td>
-              </tr>
-              <tr>
-                <td>COP4533</td>
-                <td>Algorithm Abstraction and Design</td>
-                <td>270</td>
-                <td>2:10PM, October 28, 2024</td>
-              </tr>
+            {filteredCourses.map((course, index) => (
+                <tr key={index} onClick={() => handleRowClick(index, "courses", course.title)}>  
+                  <td>{index + 1}</td> {/* Display index starting from 1 */}
+                  <td>{course.prefix}</td>
+                  <td>{course.title}</td>
+                  <td>{course.enrollment}</td>
+                  <td>{course.date_added}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
           <button className="wider-btn" onClick={handleAllCourses}>All Professor Assignments </button>
