@@ -9,17 +9,24 @@ import { UrgentApplication } from './SystemAdminHome'; // Import the Application
 
 const ApproveApplication: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
   const [status_option, setStatusOption] = useState<string>('');
-  const currentPath = location.pathname;
-  const typePath = '/approve-applications/';
-  const locationValue = currentPath.substring(typePath.length);
 
   // Load application data from localStorage on initial render
   const [application, setApplication] = useState<Application>(() => {
     const storedApplication = localStorage.getItem('applicationData');
     return storedApplication ? JSON.parse(storedApplication) : null;
   });
+
+  const [currentApplication, setCurrentApplication] = useState<UrgentApplication>(() => {
+    const storedApplication = localStorage.getItem('currentApp');
+    return storedApplication ? JSON.parse(storedApplication) : null;
+  });
+
+  const tableEntryCount = localStorage.getItem('currentTableEntryCount');
+  const rowNumber = localStorage.getItem('currentRow');
+  const rowNumberVal = Number(rowNumber);
+  const previousPage = localStorage.getItem('previousPage');
+
 
   // Load application data from localStorage on initial render
   const [urgentApplications, setUrgentApplications] = useState<UrgentApplication[]>(() => {
@@ -31,10 +38,28 @@ const ApproveApplication: React.FC = () => {
     return null; // Return null if no applications found
   });
 
+  // Load application data from localStorage on initial render
+  const [filteredApplications, setFilteredApplications] = useState<UrgentApplication[]>(() => {
+    const storedFilteredApplications = localStorage.getItem('filteredApps');
+    if (storedFilteredApplications) {
+      const parsedApplications = JSON.parse(storedFilteredApplications);
+      return parsedApplications;
+    }
+    return null; // Return null if no applications found
+  });
+
 
   useEffect(() => {
     if (!application) {
       alert('Application data is not available.');
+    }
+    else{
+      if(previousPage === "System-Admin-Home"){
+        setCurrentApplication(filteredApplications[rowNumberVal]);
+      }
+      else{
+        setCurrentApplication(urgentApplications[rowNumberVal]);
+      }
     }
   }, [application]);
 
@@ -43,29 +68,128 @@ const ApproveApplication: React.FC = () => {
   };
 
   const handlePrevious = () => {
-    if (locationValue === '1') {
+    if (rowNumber === '0') {
       alert('There are no prior applications!'); // Notify user
     }
-    navigate(`/assign-student/${locationValue}`);
+    else{
+      const newIndex = rowNumberVal - 1;
+      localStorage.setItem("currentRow", newIndex.toString()); // Store the count in localStorage
+      if(previousPage === "System-Admin-Home"){
+        setCurrentApplication(filteredApplications[newIndex]);
+        if(filteredApplications[newIndex].student_status === "Application Approval Needed"){
+          window.scrollTo(0,0);
+          navigate(`/approve-application`); // Use index + 1 for the route
+        }
+        else{
+          navigate(`/assign-student`);
+        }
+      }
+      else{
+        setCurrentApplication(urgentApplications[newIndex]);
+        if(urgentApplications[newIndex].student_status === "Application Approval Needed"){
+          window.scrollTo(0,0);
+          navigate(`/approve-application`); // Use index + 1 for the route
+        }
+        else{
+          navigate(`/assign-student`);
+        }
+      }
+      
+    }
+    
   };
 
-  const tableEntryCount = localStorage.getItem('currentTableEntryCount');
+  const handleNext = () => {
+    if (Number(tableEntryCount) === (rowNumberVal + 1)) {
+      alert('There are no next applications!'); // Notify user
+    }
+    else{
+      const newIndex = rowNumberVal + 1;
+      localStorage.setItem("currentRow", newIndex.toString()); // Store the count in localStorage
+      if(previousPage === "System-Admin-Home"){
+        setCurrentApplication(filteredApplications[newIndex]);
+        if(filteredApplications[newIndex].student_status === "Application Approval Needed"){
+          window.scrollTo(0,0);
+          navigate(`/approve-application`); // Use index + 1 for the route
+        }
+        else{
+          navigate(`/assign-student`);
+        }
+      }
+      else{
+        setCurrentApplication(urgentApplications[newIndex]);
+        if(urgentApplications[newIndex].student_status === "Application Approval Needed"){
+          window.scrollTo(0,0);
+          navigate(`/approve-application`); // Use index + 1 for the route
+        }
+        else{
+          navigate(`/assign-student`);
+        }
+      }
+    }
+    
+  };
 
   const handleConfirm = () => {
     if (status_option) {
+      if(previousPage === "System-Admin-Home"){
+        // Create a new array with the updated status for the first application
+        const updatedApplications = urgentApplications.map((application, index) => {
+          if (filteredApplications[rowNumberVal].student_ufl_email === application.student_ufl_email) { // Update the first application (index 0)
+            return { ...application, student_status: status_option }; // Update status
+          }
+          return application; // Return unchanged application for other indices
+        });
+
+        setFilteredApplications(updatedApplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected") || null);
+        localStorage.setItem('filteredApps', JSON.stringify(filteredApplications));
+        localStorage.setItem('urgentapplications', JSON.stringify(updatedApplications)); 
+      
+
+        // Update the state with the new applications array
+        setUrgentApplications(updatedApplications);
+        // Update localStorage with the new applications array
+        localStorage.setItem('urgentapplications', JSON.stringify(updatedApplications));
+        const newCount = (Number(tableEntryCount) - 1);
+
+        if(rowNumberVal >= newCount){
+          localStorage.setItem('currentRow', (Number(tableEntryCount) - 2).toString());
+        }
+        localStorage.setItem('currentTableEntryCount', newCount.toString());
+      
+        // Provide feedback based on the selected status
+        if (status_option === 'Approved') {
+          alert(`Status updated to: Approved`);
+          // Optionally redirect or provide further instructions
+        } else {
+          alert(`Status updated to: ${status_option}`);
+        }
+
+        if(newCount === 0){
+          navigate(`/system-admin-home`); // Use index + 1 for the route
+        }
+        else{
+          navigate(`/approve-application`); // Use index + 1 for the route
+          window.scrollTo(0,0);
+        }
+      } else {
+        alert('Please select a status.');
+      }
+    }
+    else{
       // Create a new array with the updated status for the first application
       const updatedApplications = urgentApplications.map((application, index) => {
-        if (index === 0) { // Update the first application (index 0)
+        if (urgentApplications[rowNumberVal].student_ufl_email === application.student_ufl_email) { // Update the first application (index 0)
           return { ...application, student_status: status_option }; // Update status
         }
         return application; // Return unchanged application for other indices
       });
-  
+
+      localStorage.setItem('urgentapplications', JSON.stringify(updatedApplications)); 
+
       // Update the state with the new applications array
       setUrgentApplications(updatedApplications);
-      // Update localStorage with the new applications array
-      localStorage.setItem('urgentapplications', JSON.stringify(updatedApplications)); 
-  
+    
       // Provide feedback based on the selected status
       if (status_option === 'Approved') {
         alert(`Status updated to: Approved`);
@@ -73,9 +197,8 @@ const ApproveApplication: React.FC = () => {
       } else {
         alert(`Status updated to: ${status_option}`);
       }
-    } else {
-      alert('Please select a status.');
     }
+    
   };
   
 
@@ -90,12 +213,12 @@ const ApproveApplication: React.FC = () => {
       <img src="/assets/Arrow left.svg" alt="back-arrow" className="back-arrow" onClick={handleBack} />
       <div className="content">
         <div className="prev-application-container">
-          <h1>Student Application (1/{tableEntryCount})</h1>
+          <h1>Student Application ({(rowNumberVal+1)?.toString()}/{tableEntryCount})</h1>
           <h2 className="indented-title"><u>Application Summary</u></h2> {/* Indented copy */}
           <div className="application-info">
             <h2>Fall 2024 Application</h2>
-            <p><b>Name: </b> Jim Beam</p>
-            <p><b>UF Email: </b> jimbeam@ufl.edu </p>
+            <p><b>Name: </b> {currentApplication.student_name} </p>
+            <p><b>UF Email: </b> {currentApplication.student_ufl_email} </p>
             <p><b>Semester admitted:</b> Summer 2021</p>
             <p><b>Graduating Semester:</b> Spring 2025</p>
             <p><b>UF GPA:</b> 3.85</p>
@@ -131,7 +254,7 @@ const ApproveApplication: React.FC = () => {
             <button className="navigation-btn" onClick={handleBack}>Exit</button>
             <button className="navigation-btn" onClick={handlePrevious}>Previous Application</button>
             <button className="navigation-btn" onClick={handleConfirm}>Confirm</button>
-            <button className="navigation-btn">Next Application</button>
+            <button className="navigation-btn" onClick={handleNext}>Next Application</button>
           </div>
           <p>Note: Please click <b>Confirm</b> after changing the status to make updates.</p>
         </div>

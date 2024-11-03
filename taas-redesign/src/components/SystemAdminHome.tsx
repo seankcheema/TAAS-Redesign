@@ -47,6 +47,7 @@ const SystemAdminHome: React.FC = () => {
       { student_name: "Jack Daniels", student_ufl_email: "jackdaniels@ufl.edu", student_status: "Application Approval Needed", date_added: "1:10PM, October 28, 2024" },
       { student_name: "Jill Hill", student_ufl_email: "jillhill@ufl.edu", student_status: "Rejected", date_added: "1:10PM, October 28, 2024" },
       { student_name: "Jane Doe", student_ufl_email: "janedoe@ufl.edu", student_status: "Application Approval Needed", date_added: "12:00PM, October 28, 2024" },
+      { student_name: "Test Man", student_ufl_email: "testman@ufl.edu", student_status: "Application Approval Needed", date_added: "12:00PM, October 28, 2024" },
     ];
   });
 
@@ -82,19 +83,37 @@ const SystemAdminHome: React.FC = () => {
 
   const handleRowClick = (index: number, tableType: "applications" | "courses", value: string) => {
     if (tableType === "applications") {
-      const selectedApplications = urgentapplications.filter(app => app.student_name === value);
-      localStorage.setItem("currentApplication", JSON.stringify(selectedApplications[0]));
+      
+      const currentStudent = urgentapplications.filter(app => app.student_name === value);
 
-      const rowCount = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected").length;
-      localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
-      navigate(`/approve-applications/${index + 1}`); // Use index + 1 for the route
+      const selectedApplications = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
+      localStorage.setItem("filteredApps", JSON.stringify(selectedApplications));
+
+      localStorage.setItem("currentTableEntryCount", (selectedApplications.length).toString()); // Store the count in localStorage
+      localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
+      localStorage.setItem("previousPage", "System-Admin-Home");
+
+      localStorage.setItem("currentApp", JSON.stringify(selectedApplications[index+1]));
+      if(currentStudent[0].student_status === "Application Approval Needed"){
+        navigate(`/approve-application`); // Use index + 1 for the route
+      }
+      else{
+        navigate(`/assign-student`);
+      }
+      
     } else if (tableType === "courses"){
       const selectedCourses = courses.filter(course => course.title === value);
       localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
 
+      localStorage.setItem("courses", JSON.stringify(courses));
+
+      const unassignedCourses = courses.filter(course => course.professors_assigned === "");
+      localStorage.setItem("filteredCourses", JSON.stringify(unassignedCourses));
+
       const rowCount = courses.filter(course => course.professors_assigned === "").length;
       localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
-      localStorage.setItem("currentRow", (index + 1).toString()); // Store the count in localStorage
+      localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
+      localStorage.setItem("previousPage", "System-Admin-Home");
       navigate(`/course-editor/`); // Use index + 1 for the route
     }
   };

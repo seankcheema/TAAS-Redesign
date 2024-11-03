@@ -28,10 +28,12 @@ const CourseManager: React.FC = () =>{
     const table = event.currentTarget.closest('table'); 
     const rowCount = (Number(table?.querySelectorAll('tbody tr').length)) || 0; // Count rows in <tbody> only to exclude header
     localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
-    localStorage.setItem("rowNumber", (index + 1).toString());
+    localStorage.setItem("currentRow", index.toString());
 
     const selectedCourses = courses.filter(course => course.prefix === value);
     localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
+    localStorage.setItem("previousPage", "Course-Manager");
+    localStorage.setItem('courses', JSON.stringify(courses));
     
     navigate(`/course-editor`);
   }
