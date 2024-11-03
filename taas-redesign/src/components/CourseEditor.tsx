@@ -25,6 +25,10 @@ const CourseEditor: React.FC = () => {
   // Example list of professors for the dropdown
   const professorOptions = ["Dr. Smith", "Prof. Johnson", "Dr. Lee", "Prof. Martinez", "Dr. Brown"];
   const taOptions = ["TA Jane", "TA John", "TA Emma", "TA Lucas", "TA Olivia"];
+  const tableEntryCount = localStorage.getItem('currentTableEntryCount');
+  const rowNumber = localStorage.getItem('currentRow');
+  const rowNumberVal = Number(rowNumber);
+  const previousPage = localStorage.getItem('previousPage');
 
   const [application, setApplication] = useState<Application>({
     semesterAdmitted: '',
@@ -40,6 +44,26 @@ const CourseEditor: React.FC = () => {
     status: 'In Progress',
     dateSubmitted: '',
     classStanding: '', // Initialize class standing
+});
+
+// Load application data from localStorage on initial render
+const [urgentCourses, setUrgentApplications] = useState<Course[]>(() => {
+  const storedCourses = localStorage.getItem('courses');
+  if (storedCourses) {
+    const parsedCourses = JSON.parse(storedCourses);
+    return parsedCourses;
+  }
+  return null; // Return null if no applications found
+});
+
+// Load application data from localStorage on initial render
+const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
+  const storedFilteredCourses = localStorage.getItem('filteredCourses');
+  if (storedFilteredCourses) {
+    const parsedApplications = JSON.parse(storedFilteredCourses);
+    return parsedApplications;
+  }
+  return null; // Return null if no applications found
 });
 
   const navigate = useNavigate();
@@ -141,29 +165,111 @@ const CourseEditor: React.FC = () => {
 
   const handleUpdateCourse = () => {
     if (course) {
-      course.professors_assigned = professorList.join(',');
-      course.tas_assigned = taList.join(',');
-      // Create a new array with the updated status for the first application
-      const updatedCourses = courses.map((courseOriginal) => {
-        if (courseOriginal.prefix === course.prefix) { // Update the first application (index 0)
-          alert(course.professors_assigned + " and " + course.tas_assigned)
-          return { ...courseOriginal, professors_assigned: course.professors_assigned, tas_assigned: course.tas_assigned }; // Update status
-        }
-        return courseOriginal; // Return unchanged application for other indices
-      });
-  
-      // Update the state with the new applications array
-      setCourses(updatedCourses);
-      // Update localStorage with the new applications array
-      localStorage.setItem('currentCourse', JSON.stringify(course)); 
-      localStorage.setItem('courses', JSON.stringify(updatedCourses)); 
+      // Join lists for professors and TAs to store as strings
+      course.professors_assigned = professorList.join(', ');
+      course.tas_assigned = taList.join(', ');
 
+      // Update the main courses list
+      const updatedCourses = courses.map((courseOriginal) => {
+        if (courseOriginal.prefix === course.prefix) {
+          return { ...courseOriginal, professors_assigned: course.professors_assigned, tas_assigned: course.tas_assigned };
+        }
+        return courseOriginal;
+      });
+      setCourses(updatedCourses);
+      localStorage.setItem('courses', JSON.stringify(updatedCourses));
   
-      alert('Updated course.');
+      // Update filteredCourses only if we're on the System Admin Home page
+      if (previousPage === "System-Admin-Home") {
+        const updatedFilteredCourses = filteredCourses.map((courseO) => {
+          if (course.prefix === courseO.prefix) {
+            return { ...courseO, professors_assigned: course.professors_assigned, tas_assigned: course.tas_assigned };
+          }
+          return courseO;
+        });
+        const newFiltered = updatedFilteredCourses.filter(course => course.professors_assigned === "");
+        setFilteredCourses(newFiltered);
+        localStorage.setItem('filteredCourses', JSON.stringify(newFiltered));
+        setCourse(newFiltered[0]);
+        localStorage.setItem('currentCourse', JSON.stringify(newFiltered[0]));
+      }
+      
+
+      if(previousPage === "System-Admin-Home"){
+        const newCount = (Number(tableEntryCount) - 1);
+
+        var value = 0;
+
+        if(rowNumberVal >= newCount){
+          localStorage.setItem('currentRow', (Number(tableEntryCount) - 2).toString());
+          value = Number(tableEntryCount) - 2;
+          
+        }
+        else{
+          localStorage.setItem('currentCourse', JSON.stringify(filteredCourses[rowNumberVal]))
+          value = rowNumberVal;
+        }
+        localStorage.setItem('currentTableEntryCount', newCount.toString());
+        setProfessorList(filteredCourses[value].professors_assigned ? filteredCourses[value].professors_assigned.split(',').map(name => name.trim()) : []);
+        setTAList(filteredCourses[value].tas_assigned ? filteredCourses[value].tas_assigned.split(',').map(name => name.trim()) : []);
+      }
+  
+      navigate(`/course-editor`);
+      window.scrollTo(0, 0); // Scroll to top for better user experience
+  
+      alert('Course updated successfully.');
+    }
+  };
+  
+
+  const handleNext = () => {
+    if (Number(tableEntryCount) === rowNumberVal + 1) {
+      alert('There are no next applications!'); // Notify user
+    } else {
+      const newIndex = rowNumberVal + 1;
+      localStorage.setItem("currentRow", newIndex.toString()); // Store the count in localStorage
+      
+      let nextCourse: Course;
+      if (previousPage === "System-Admin-Home") {
+        nextCourse = filteredCourses[newIndex];
+      } else {
+        nextCourse = urgentCourses[newIndex];
+      }
+  
+      setCourse(nextCourse);
+      setProfessorList(nextCourse.professors_assigned ? nextCourse.professors_assigned.split(',').map(name => name.trim()) : []);
+      setTAList(nextCourse.tas_assigned ? nextCourse.tas_assigned.split(',').map(name => name.trim()) : []);
+      
+      window.scrollTo(0, 0);
+      navigate(`/course-editor`);
+    }
+  };
+  
+  const handlePrevious = () => {
+    if (rowNumber === '0') {
+      alert('There are no prior applications!'); // Notify user
+    } else {
+      const newIndex = rowNumberVal - 1;
+      localStorage.setItem("currentRow", newIndex.toString()); // Store the count in localStorage
+  
+      let previousCourse: Course;
+      if (previousPage === "System-Admin-Home") {
+        previousCourse = filteredCourses[newIndex];
+      } else {
+        previousCourse = urgentCourses[newIndex];
+      }
+  
+      setCourse(previousCourse);
+      setProfessorList(previousCourse.professors_assigned ? previousCourse.professors_assigned.split(',').map(name => name.trim()) : []);
+      setTAList(previousCourse.tas_assigned ? previousCourse.tas_assigned.split(',').map(name => name.trim()) : []);
+      
+      window.scrollTo(0, 0);
+      navigate(`/course-editor`);
     }
   };
 
-  const enrollment = course.enrollment.toString();
+  const handleConfirm = () => {
+  }
 
  
   const handleBack = () => {
@@ -176,7 +282,7 @@ const CourseEditor: React.FC = () => {
       <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack} />
       <div className="content">
         <div className="application-container">
-        <h2>{course.prefix} - {course.title} Information</h2>
+        <h2>{course.prefix} - {course.title} Information : Course {rowNumberVal + 1} / {tableEntryCount}</h2>
         <p>Course Prefix: {course.prefix}</p>
         <p>Course Name: {course.title}</p>
         <p>Enrollment: {course.enrollment}</p>
@@ -281,11 +387,20 @@ const CourseEditor: React.FC = () => {
             </div>
 
           </form>
-          <div className="button-group">
+          <div className="button-group" style={{marginBottom: '100px'}}>
             <button className="submit-preferences-btn" onClick={handleUpdateCourse}>Update Course</button>
           </div>
+          
+          <div className="nav-button-group" style={{marginTop: '50px', marginBottom: '10px'}}>
+            <button className="navigation-btn" onClick={handleBack}>Exit</button>
+            <button className="navigation-btn" onClick={handlePrevious}>Previous Application</button>
+            <button className="navigation-btn" onClick={handleConfirm}>Confirm</button>
+            <button className="navigation-btn" onClick={handleNext}>Next Application</button>
+          </div>
         </div>
+        
       </div>
+      
 
       <Footer />
     </div>

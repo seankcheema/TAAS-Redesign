@@ -89,8 +89,33 @@ small {
 
   
   .button-group {
+    display: flex;
     position: absolute;
-    bottom: 1rem;
     right: 1rem;
   }
   
+
+  .nav-button-group {
+    display: flex;
+    margin-top: 200px;
+    margin-bottom: 200px;
+    justify-content: center; /* Center the buttons horizontally */
+    align-items: center; /* Align buttons vertically within the div */
+    gap: 30px; /* Space between buttons */
+    width: 100%; /* Ensure button group takes full width of its container */
+  }
+  
+  .navigation-btn {
+    padding: 10px 20px; /* Match padding with .import-latest-button */
+    font-size: 1.2em; /* Increase font size to match dropdown */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #365798; /* Button color */
+    color: white;
+    width: 250px; /* Match the width of the dropdown */
+  }
+  
+  .navigation-btn:hover {
+    background-color: #00509e; /* Hover effect */
+  }
