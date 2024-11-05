@@ -5,20 +5,24 @@ import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
 
 export interface Application {
-    semesterAdmitted: string;
-    graduatingSemester: string;
-    ufGpa: string;
-    ufId: string;
-    countryOfOrigin: string;
-    coursePreferences: string[];
-    researchInterests: string;
-    travelPlans: string;
-    submitted?: boolean;
-    semester: string;
-    status: string;
-    dateSubmitted: string;
-    classStanding: string;
+  semesterAdmitted: string;
+  graduatingSemester: string;
+  ufGpa: string;
+  ufId: string;
+  name: string;
+  email: string;
+  countryOfOrigin: string;
+  coursePreferences: string[];
+  researchInterests: string;
+  travelPlans: string;
+  submitted?: boolean;
+  semester: string;
+  status: string;
+  dateSubmitted: string;
+  classStanding: string;
+  priority: number | null;
 }
+
 
 const Apply: React.FC = () => {
   const [application, setApplication] = useState<Application>({
@@ -26,6 +30,8 @@ const Apply: React.FC = () => {
     graduatingSemester: '',
     ufGpa: '',
     ufId: '',
+    name: 'New Student',
+    email: 'new_student@ufl.edu',
     countryOfOrigin: '',
     coursePreferences: Array(5).fill(''),
     researchInterests: '',
@@ -35,6 +41,7 @@ const Apply: React.FC = () => {
     status: 'In Progress',
     dateSubmitted: '',
     classStanding: '', // Initialize class standing
+    priority: null,
 });
 
 
@@ -111,6 +118,8 @@ const Apply: React.FC = () => {
         graduatingSemester: 'Spring 2025',
         ufGpa: '3.85',
         ufId: '1234-5678',
+        name: 'New Student',
+        email: 'new_student@ufl.edu',
         countryOfOrigin: 'United States',
         coursePreferences: [
             'COP4600 - Operating Systems',
@@ -126,6 +135,7 @@ const Apply: React.FC = () => {
         status: 'Under Consideration',
         dateSubmitted: '',
         classStanding: 'Senior', // Set class standing
+        priority: null,
     });
 };
 
@@ -141,7 +151,7 @@ const Apply: React.FC = () => {
     console.log("Submitting application data:", application);
 
     // Save to local storage, mark as submitted
-    application.status = 'Submitted';
+    application.status = 'Pending Review';
     application.dateSubmitted = new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
@@ -149,6 +159,16 @@ const Apply: React.FC = () => {
     });    
     const applicationData = { ...application, submitted: true };
     localStorage.setItem('applicationData', JSON.stringify(applicationData));
+
+    // Retrieve existing applications from localStorage, or initialize an empty array if none exist
+    const savedApplications = JSON.parse(localStorage.getItem('applicationsData') || '[]');
+
+    // Add the new application to the array
+    const updatedApplications = [...savedApplications, applicationData];
+
+    // Save the updated array back to localStorage
+    localStorage.setItem('applicationsData', JSON.stringify(updatedApplications));
+
 
     alert("Application submitted successfully!"); // Notify user
 
