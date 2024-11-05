@@ -3,25 +3,8 @@ import './SystemAdminHome.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
+import { Application } from './Apply';
 
-export interface Application {
-  semesterAdmitted: string;
-  graduatingSemester: string;
-  ufGpa: string;
-  ufId: string;
-  name: string;
-  email: string;
-  countryOfOrigin: string;
-  coursePreferences: string[];
-  researchInterests: string;
-  travelPlans: string;
-  submitted?: boolean;
-  semester: string;
-  status: string;
-  dateSubmitted: string;
-  classStanding: string;
-  priority: number | null;
-}
 
 export interface UrgentApplication {
   student_name: string;
@@ -33,9 +16,9 @@ export interface UrgentApplication {
 export interface Course {
   prefix: string;
   title: string;
-  professors_assigned: string;
-  tas_assigned: string;
-  enrollment: number;
+  professors_assigned: string[];
+  tas_assigned: string[];
+  capacity: number;
   date_added: string;
 }
 
@@ -69,11 +52,13 @@ const SystemAdminHome: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>(() => {
     const storedCourses = localStorage.getItem('courses');
     return storedCourses ? JSON.parse(storedCourses) : [
-      { prefix: "CIS4301", title: "Databases", professors_assigned: "", tas_assigned: "", enrollment: 110, date_added: "2:20PM, October 28, 2024" },
-      { prefix: "COT3100", title: "Discrete Math", professors_assigned: "", tas_assigned: "", enrollment: 250, date_added: "2:10PM, October 28, 2024" },
-      { prefix: "COP4600", title: "Operating Systems", professors_assigned: "Alexis Seguro", tas_assigned: "", enrollment: 110, date_added: "2:20PM, October 28, 2024" },
+      {title: "CIS4301 - Information and Database Systems", professors_assigned: [], tas_assigned: "", capacity: 12, date_added: "October 28, 2024" },
+      {title: "COT3100 - Applications of Discrete Structures", professors_assigned: [], tas_assigned: "", capacity: 15, date_added: "October 28, 2024" },
+      {title: "COP4600 - Operating Systems", professors_assigned: ["Alexandre Gomes de Siqueira"], tas_assigned: "", capacity: 22, date_added: "October 28, 2024" },
     ];
   });
+
+  
 
   const navigate = useNavigate();
 
@@ -92,43 +77,6 @@ const SystemAdminHome: React.FC = () => {
   const handleAllCourses = () => {
     navigate('/course-manager');    
   };
-
-  // const handleRowClick = (index: number, tableType: "applications" | "courses", value: string) => {
-  //   if (tableType === "applications") {
-      
-  //     const currentStudent = urgentApplications.filter(app => app.student_name === value);
-
-  //     const selectedApplications = urgentApplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
-  //     localStorage.setItem("filteredApps", JSON.stringify(selectedApplications));
-
-  //     localStorage.setItem("currentTableEntryCount", (selectedApplications.length).toString()); // Store the count in localStorage
-  //     localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
-  //     localStorage.setItem("previousPage", "System-Admin-Home");
-
-  //     localStorage.setItem("currentApp", JSON.stringify(selectedApplications[index+1]));
-  //     if(currentStudent[0].student_status === "Pending Review"){
-  //       navigate(`/approve-application`); // Use index + 1 for the route
-  //     }
-  //     else{
-  //       navigate(`/assign-student`);
-  //     }
-      
-  //   } else if (tableType === "courses"){
-  //     const selectedCourses = courses.filter(course => course.title === value);
-  //     localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
-
-  //     localStorage.setItem("courses", JSON.stringify(courses));
-
-  //     const unassignedCourses = courses.filter(course => course.professors_assigned === "");
-  //     localStorage.setItem("filteredCourses", JSON.stringify(unassignedCourses));
-
-  //     const rowCount = courses.filter(course => course.professors_assigned === "").length;
-  //     localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
-  //     localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
-  //     localStorage.setItem("previousPage", "System-Admin-Home");
-  //     navigate(`/course-editor/`); // Use index + 1 for the route
-  //   }
-  // };
 
   const handleReview = (index: number, value: string) => {
     const currentStudent = urgentApplications.filter(app => app.student_ufl_email === value);
@@ -149,6 +97,16 @@ const SystemAdminHome: React.FC = () => {
       }
   };
 
+  const handleCourseReview = (index: number, value: string) => {
+      const selectedCourses = courses.filter(course => course.title === value);
+      localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
+
+      localStorage.setItem("courses", JSON.stringify(courses));
+      localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
+      localStorage.setItem("previousPage", "System-Admin-Home");
+      navigate(`/course-editor/`); // Use index + 1 for the route 
+  };
+
 
   return (
     <div className="ta-assignment-container">
@@ -159,7 +117,7 @@ const SystemAdminHome: React.FC = () => {
         <div className="manage-section">
           <h2>Manage TA Applications</h2>
           <p>
-            Update the status of applying students who need action.
+            Update the status of applying students who need action. There are currently <a>{urgentApplications.length}</a> applications that require review.
           </p>
           <table>
             <thead>
@@ -172,7 +130,6 @@ const SystemAdminHome: React.FC = () => {
             </thead>
             <tbody>
             {urgentApplications
-              .sort((a, b) => new Date(b.date_added).getTime() - new Date(a.date_added).getTime())
               .slice(0, 3)
               .map((UA, index) => (
                 <tr key={index}>
@@ -198,21 +155,21 @@ const SystemAdminHome: React.FC = () => {
           <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Prefix</th>
-                <th>Title</th>
-                <th>Enrollment</th>
-                <th>Date Added</th>
+                <th>Course</th>
+                <th>Professors Assigned</th>
+                <th>Capacity</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
               {courses.map((course, index) => (
-                <tr key={index} onClick={() => navigate(`/course-editor/${course.prefix}`)}>
-                  <td>{index + 1}</td> {/* Display index starting from 1 */}
-                  <td>{course.prefix}</td>
+                <tr key={index}>
                   <td>{course.title}</td>
-                  <td>{course.enrollment}</td>
-                  <td>{course.date_added}</td>
+                  <td>{course.professors_assigned.join(', ')}</td>
+                  <td>{course.capacity}</td>
+                  <td>
+                    <button className="review-btn" onClick={() => handleCourseReview(index, course.title)}>Review</button>
+                  </td>
                 </tr>
               ))}
             </tbody>

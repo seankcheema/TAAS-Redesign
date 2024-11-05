@@ -3,19 +3,13 @@ import './AssignStudent.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
-import { Application } from './SystemAdminHome';
+import { Application } from './Apply';
 
 
 
 const AssignStudent: React.FC = () =>{
   const navigate = useNavigate();
   const [status_option, setStatusOption] = useState<string>('');
-
-  // Load application data from localStorage on initial render
-  const [application, setApplication] = useState<Application>(() => {
-    const storedApplication = localStorage.getItem('applicationData');
-    return storedApplication ? JSON.parse(storedApplication) : null;
-  });
 
   const [currentApplication, setCurrentApplication] = useState<Application>(() => {
     const storedApplication = localStorage.getItem('currentApp');
@@ -63,9 +57,9 @@ const AssignStudent: React.FC = () =>{
       setCurrentApplication(urgentApplications[rowNumberVal]);
     }
   }, [currentApplication]);
-
+ 
   const handleBack = () => {
-    navigate('/system-admin-home');
+    navigate('/application-manager');
   };
 
   const handlePrevious = () => {
@@ -102,7 +96,7 @@ const AssignStudent: React.FC = () =>{
 
   const handleNext = () => {
     if (Number(tableEntryCount) === (rowNumberVal + 1)) {
-      alert('There are no next applications!'); // Notify user
+      alert('There are no more applications!'); // Notify user
     }
     else{
       const newIndex = rowNumberVal + 1;

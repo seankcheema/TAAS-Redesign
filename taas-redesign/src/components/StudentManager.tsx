@@ -33,8 +33,8 @@ const StudentManager: React.FC = () => {
   };
 
   const displayedApplications = filterPending
-    ? urgentApplications.filter((app) => app.student_status === 'Pending Review')
-    : urgentApplications;
+    ? Applications.filter((app) => app.status === 'Pending Review')
+    : Applications;
 
   useEffect(() => {
     localStorage.setItem('urgentapplications', JSON.stringify(urgentApplications));
@@ -65,9 +65,9 @@ const StudentManager: React.FC = () => {
             <tbody>
               {displayedApplications.map((application, index) => (
                 <tr key={index}>
-                  <td>{application.student_name}</td>
-                  <td>{application.student_status}</td>
-                  <td>{application.date_added}</td>
+                  <td>{application.name}</td>
+                  <td>{application.status}</td>
+                  <td>{application.dateSubmitted}</td>
                   <td>
                     <button className="review-btn" onClick={handleReview}>Review</button>
                   </td>

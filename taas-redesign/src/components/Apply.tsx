@@ -21,6 +21,7 @@ export interface Application {
   dateSubmitted: string;
   classStanding: string;
   priority: number | null;
+  assignment: string;
 }
 
 
@@ -42,6 +43,7 @@ const Apply: React.FC = () => {
     dateSubmitted: '',
     classStanding: '', // Initialize class standing
     priority: null,
+    assignment: '',
 });
 
 
@@ -136,6 +138,7 @@ const Apply: React.FC = () => {
         dateSubmitted: '',
         classStanding: 'Senior', // Set class standing
         priority: null,
+        assignment: '',
     });
 };
 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import './ApproveApplication.css';
+import './ApplicationManager.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
 import { Application } from './Apply';
+import { Course } from './SystemAdminHome';
 
 const ApproveApplication: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +17,6 @@ const ApproveApplication: React.FC = () => {
   const tableEntryCount = applicationsData.length;
   const rowNumber = localStorage.getItem('currentRow');
   const rowNumberVal = rowNumber ? Number(rowNumber) : 0;
-  const previousPage = localStorage.getItem('previousPage');
 
   useEffect(() => {
     const selectedApplication = applicationsData[rowNumberVal];
@@ -28,7 +28,7 @@ const ApproveApplication: React.FC = () => {
   }, [applicationsData, rowNumberVal]);
 
   const handleBack = () => {
-    navigate('/system-admin-home');
+    navigate('/application-manager');
   };
 
   const handlePrevious = () => {
@@ -43,7 +43,7 @@ const ApproveApplication: React.FC = () => {
 
   const handleNext = () => {
     if (rowNumberVal >= tableEntryCount - 1) {
-      alert('There are no next applications!');
+      alert('There are no more applications!');
       return;
     }
     const newIndex = rowNumberVal + 1;
@@ -52,26 +52,52 @@ const ApproveApplication: React.FC = () => {
   };
 
   const handleConfirm = () => {
-    if (!statusOption) {
+    if (!statusOption && currentApplication?.status === "Pending Review") {
       alert('Please select a status.');
       return;
     }
-
-  //   // Create a new array with the updated status
-  //   const updatedApplications = applicationsData.map(application => {
-  //     // Assuming student_ufl_email is the unique identifier
-  //     if (currentApplication && application.email === currentApplication.email) {
-  //         return { ...application, student_status: statusOption }; // Update the status
-  //     }
-  //     return application; // Return unchanged application for others
-  // });
-
-  // // Save the updated applications array to local storage
-  // localStorage.setItem('applicationsData', JSON.stringify(updatedApplications));
-
-  // // Update the local state (optional)
-  // setApplicationsData(updatedApplications);
-
+  
+    // Update the status of the current application
+    const updatedApplicationsData = [...applicationsData];
+    if (statusOption === 'Denied') {
+      updatedApplicationsData[rowNumberVal].status = 'Denied';
+      updatedApplicationsData[rowNumberVal].assignment = 'Denied';
+    } else {
+      updatedApplicationsData[rowNumberVal].status = 'Approved';
+      updatedApplicationsData[rowNumberVal].assignment = statusOption;
+    }
+  
+    // Update applications data in state and localStorage
+    setApplicationsData(updatedApplicationsData);
+    localStorage.setItem('applicationsData', JSON.stringify(updatedApplicationsData));
+    alert(`${currentApplication?.name}'s assignment updated to ` + statusOption);
+  
+    // Load courses from local memory
+    const storedCourses = localStorage.getItem('courses');
+    const courses: Course[] = storedCourses ? JSON.parse(storedCourses) : []; // Define the type here
+  
+    // Find the course matching the statusOption
+    const courseIndex = courses.findIndex((course: Course) => course.title === statusOption); // Define type for course
+    if (courseIndex !== -1 && currentApplication) { // Check that currentApplication is not null
+      // Add the currentApplication's name to the tas_assigned list
+      const currentTAName = currentApplication.name; // Assuming currentApplication has a name property
+      const course = courses[courseIndex];
+  
+      // Check if the name is already in the tas_assigned list to avoid duplicates
+      if (!course.tas_assigned.includes(currentTAName)) {
+        course.tas_assigned = [...course.tas_assigned, currentTAName];
+      }
+  
+      // Update the courses array with the modified course
+      courses[courseIndex] = course;
+  
+      // Save updated courses back to localStorage
+      localStorage.setItem('courses', JSON.stringify(courses));
+    } else if (!currentApplication) {
+      alert("Current application is null. Please check the application data.");
+    } else {
+      alert(`Course with title "${statusOption}" not found.`);
+    }
   };
 
   const assignmentOptions = [
@@ -89,7 +115,7 @@ const ApproveApplication: React.FC = () => {
       <img src="/assets/Arrow left.svg" alt="back-arrow" className="back-arrow" onClick={handleBack} />
       <div className="content">
         <div className="prev-application-container">
-          <h2>Student Application ({rowNumberVal + 1}/{tableEntryCount})</h2>
+          <h2>Student Application</h2>
           {currentApplication && (
             <div className="application-info">
               <p><b>Name: </b>{currentApplication.name}</p>
@@ -111,12 +137,44 @@ const ApproveApplication: React.FC = () => {
             </div>
           )}
 
+        <h2>Professor Preferences</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Professor's Name</th>
+                <th>Course Prefix</th>
+                <th>Course Name</th>
+                <th>Preference</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Alexandre Gomes de Siqueira</td>
+                <td>COP4600</td>
+                <td>Operating Systems</td>
+                <td>High</td>
+              </tr>
+              <tr>
+                <td>Lisha Zhou</td>
+                <td>COP3502C</td>
+                <td>Programming Fundamentals 1</td>
+                <td>Low</td>
+              </tr>
+              <tr>
+                <td>Cheryl Resch</td>
+                <td>CDA3101</td>
+                <td>Computer Organization</td>
+                <td>Medium</td>
+              </tr>
+            </tbody>
+          </table>
+
           <hr className="separator-line" />
           <div className="form-group-sys-add">
             <div className="form-group-wrapper">
               <label>Assign to</label>
               <select className='assignment-selection' value={statusOption} onChange={(e) => setStatusOption(e.target.value)}>
-                <option value="">--Select--</option>
+                <option value="">{currentApplication?.assignment}</option>
                 {assignmentOptions.map((option) => (
                   <option key={option} value={option}>
                     {option}
@@ -126,7 +184,6 @@ const ApproveApplication: React.FC = () => {
             </div>
           </div>
           <div className="nav-button-group">
-            <button className="navigation-btn" onClick={handleBack}>Exit</button>
             <button className="navigation-btn" onClick={handlePrevious}>Previous Application</button>
             <button className="navigation-btn" onClick={handleConfirm}>Confirm</button>
             <button className="navigation-btn" onClick={handleNext}>Next Application</button>

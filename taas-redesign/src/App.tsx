@@ -8,31 +8,13 @@ import SystemAdminHome from './components/SystemAdminHome';
 import Course from './components/Course';
 import AppReview from './components/AppReview';
 import PrevApplication from './components/PrevApplication';
-import ApproveApplication from './components/ApproveApplication';
+import ApproveApplication from './components/ApplicationManager';
 import Apply from './components/Apply';
 import AssignStudent from './components/AssignStudent';
 import StudentManager from './components/StudentManager';
 import CourseManager from './components/CourseManager';
 import CourseEditor from './components/CourseEditor';
-
-interface Application {
-  semesterAdmitted: string;
-  graduatingSemester: string;
-  ufGpa: string;
-  ufId: string;
-  name: string;
-  email: string;
-  countryOfOrigin: string;
-  coursePreferences: string[];
-  researchInterests: string;
-  travelPlans: string;
-  submitted?: boolean;
-  semester: string;
-  status: string;
-  dateSubmitted: string;
-  classStanding: string;
-  priority: number | null;
-}
+import { Application } from './components/Apply';
 
 function App() {
   useEffect(() => {
@@ -60,6 +42,7 @@ function App() {
           dateSubmitted: 'October 31, 2024',
           classStanding: 'Junior',
           priority: null,
+          assignment: '',
         },
         {
           semesterAdmitted: 'Fall 2022',
@@ -70,7 +53,7 @@ function App() {
           email: 'student2@ufl.edu',
           countryOfOrigin: 'USA',
           coursePreferences: ["COP3502C - Programming Fundamentals 1", 
-          "COP3503C - Programming Fundamentals 2", 
+          "COP4600 - Operating Systems",
           "CEN3031 - Introduction to Software Engineering",
           "CDA3101 - Introduction to Computer Organization", 
           "COT3100 - Applications of Discrete Structures",
@@ -83,6 +66,7 @@ function App() {
           dateSubmitted: 'October 28, 2024',
           classStanding: 'Senior',
           priority: null,
+          assignment: '',
         },
         {
           semesterAdmitted: 'Fall 2023',
@@ -92,7 +76,7 @@ function App() {
           name: 'Student 3',
           email: 'student3@ufl.edu',
           countryOfOrigin: 'USA',
-          coursePreferences: ["CIS4301 - Information and Database Systems",
+          coursePreferences: ["COP4600 - Operating Systems",
     "CIS4914 - Senior Project", 
     "CAP4410 - Computer Vision"],
           researchInterests: 'Software Engineering, Security',
@@ -103,6 +87,7 @@ function App() {
           dateSubmitted: 'October 27, 2024',
           classStanding: 'Sophomore',
           priority: null,
+          assignment: '',
         },
       ];
       
