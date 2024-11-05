@@ -79,23 +79,25 @@ const SystemAdminHome: React.FC = () => {
   };
 
   const handleReview = (index: number, value: string) => {
-    const currentStudent = urgentApplications.filter(app => app.student_ufl_email === value);
-
+    // Find the selected application directly from the urgentApplications
+    const selectedApplication = urgentApplications.find(app => app.student_ufl_email === value);
+  
+    if (selectedApplication) {
       const selectedApplications = urgentApplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
       localStorage.setItem("filteredApps", JSON.stringify(selectedApplications));
-
       localStorage.setItem("currentTableEntryCount", (selectedApplications.length).toString()); // Store the count in localStorage
       localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
       localStorage.setItem("previousPage", "System-Admin-Home");
-
-      localStorage.setItem("currentApp", JSON.stringify(selectedApplications[index+1]));
-      if(currentStudent[0].student_status === "Pending Review"){
-        navigate(`/review-applications`); // Use index + 1 for the route
-      }
-      else{
-        navigate(`/assign-student`);
-      }
+  
+      // Store the current application based on the selected application found
+      localStorage.setItem("currentApp", JSON.stringify(selectedApplication));
+  
+      navigate(`/review-applications`);
+    } else {
+      alert("Application not found.");
+    }
   };
+  
 
   const handleCourseReview = (index: number, value: string) => {
       const selectedCourses = courses.filter(course => course.title === value);
