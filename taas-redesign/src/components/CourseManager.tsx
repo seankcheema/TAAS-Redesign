@@ -44,12 +44,10 @@ const CourseManager: React.FC = () =>{
       <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack}/>
       <div className="content">
         <div className='prev-application-container'>
-        <h1>Professor Assignment Manager</h1>
-        <div className='header-container'>
-          <h2 className="indented-title"><u>Courses</u></h2>
+        <h2>Professor Assignment Manager</h2>
+        <div className='filter-btn-container'>
           <button className="filter-btn">Filter</button>
         </div>
-        <p>Click on course entries to assign a professor to them.</p>
         <table>
             <thead>
               <tr>

@@ -23,6 +23,7 @@ const ProfessorHome: React.FC = () =>{
             <h2>Fall 2024 Application</h2>
             <p><b>Semester admitted:</b> Summer 2021</p>
             <p><b>Graduating Semester:</b> Spring 2025</p>
+            <p><b>Class Standing:</b> Senior</p>
             <p><b>UF GPA:</b> 3.85</p>
             <p><b>UF ID:</b> 1234-5678</p>
             <p><b>Country of Origin:</b> United States</p>

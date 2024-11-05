@@ -64,6 +64,8 @@ const SystemAdminHome: React.FC = () => {
     return [];
   });
 
+  localStorage.setItem('urgentapplications', JSON.stringify(urgentApplications));
+
   const [courses, setCourses] = useState<Course[]>(() => {
     const storedCourses = localStorage.getItem('courses');
     return storedCourses ? JSON.parse(storedCourses) : [
@@ -80,17 +82,73 @@ const SystemAdminHome: React.FC = () => {
     localStorage.setItem('courses', JSON.stringify(courses));
 
     // Filter applications with status "Pending Review" and store them as urgentApplications
-    const urgentApplications = applicationsData.filter(application => application.status === 'Pending Review');
     localStorage.setItem('urgentapplications', JSON.stringify(urgentApplications));
   }, [applicationsData, courses]);
 
   const handleAllTAs = () => {
-    navigate('/student-manager');    
+    navigate('/application-manager');    
   };
 
   const handleAllCourses = () => {
     navigate('/course-manager');    
   };
+
+  // const handleRowClick = (index: number, tableType: "applications" | "courses", value: string) => {
+  //   if (tableType === "applications") {
+      
+  //     const currentStudent = urgentApplications.filter(app => app.student_name === value);
+
+  //     const selectedApplications = urgentApplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
+  //     localStorage.setItem("filteredApps", JSON.stringify(selectedApplications));
+
+  //     localStorage.setItem("currentTableEntryCount", (selectedApplications.length).toString()); // Store the count in localStorage
+  //     localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
+  //     localStorage.setItem("previousPage", "System-Admin-Home");
+
+  //     localStorage.setItem("currentApp", JSON.stringify(selectedApplications[index+1]));
+  //     if(currentStudent[0].student_status === "Pending Review"){
+  //       navigate(`/approve-application`); // Use index + 1 for the route
+  //     }
+  //     else{
+  //       navigate(`/assign-student`);
+  //     }
+      
+  //   } else if (tableType === "courses"){
+  //     const selectedCourses = courses.filter(course => course.title === value);
+  //     localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
+
+  //     localStorage.setItem("courses", JSON.stringify(courses));
+
+  //     const unassignedCourses = courses.filter(course => course.professors_assigned === "");
+  //     localStorage.setItem("filteredCourses", JSON.stringify(unassignedCourses));
+
+  //     const rowCount = courses.filter(course => course.professors_assigned === "").length;
+  //     localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
+  //     localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
+  //     localStorage.setItem("previousPage", "System-Admin-Home");
+  //     navigate(`/course-editor/`); // Use index + 1 for the route
+  //   }
+  // };
+
+  const handleReview = (index: number, value: string) => {
+    const currentStudent = urgentApplications.filter(app => app.student_ufl_email === value);
+
+      const selectedApplications = urgentApplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
+      localStorage.setItem("filteredApps", JSON.stringify(selectedApplications));
+
+      localStorage.setItem("currentTableEntryCount", (selectedApplications.length).toString()); // Store the count in localStorage
+      localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
+      localStorage.setItem("previousPage", "System-Admin-Home");
+
+      localStorage.setItem("currentApp", JSON.stringify(selectedApplications[index+1]));
+      if(currentStudent[0].student_status === "Pending Review"){
+        navigate(`/review-applications`); // Use index + 1 for the route
+      }
+      else{
+        navigate(`/assign-student`);
+      }
+  };
+
 
   return (
     <div className="ta-assignment-container">
@@ -107,21 +165,28 @@ const SystemAdminHome: React.FC = () => {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Email</th>
+                <th>Status</th>
                 <th>Date Submitted</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {urgentApplications.map((UA, index) => (
+            {urgentApplications
+              .sort((a, b) => new Date(b.date_added).getTime() - new Date(a.date_added).getTime())
+              .slice(0, 3)
+              .map((UA, index) => (
                 <tr key={index}>
-                  <td>{UA.student_name}</td> 
-                  <td>{UA.student_ufl_email}</td> 
+                  <td>{UA.student_name}</td>
+                  <td>{UA.student_status}</td>
                   <td>{UA.date_added}</td>
+                  <td>
+                    <button className="review-btn" onClick={() => handleReview(index, UA.student_ufl_email)}>Review</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button className="wider-btn" onClick={handleAllTAs}>All TA Applications</button>
+          <button className="wider-btn" onClick={handleAllTAs}>Show All TA Applications</button>
         </div>
 
         {/* Professor-Course Assignment Section */}
@@ -152,7 +217,7 @@ const SystemAdminHome: React.FC = () => {
               ))}
             </tbody>
           </table>
-          <button className="wider-btn" onClick={handleAllCourses}>All Professor Assignments</button>
+          <button className="wider-btn" onClick={handleAllCourses}>Show All Professor Assignments</button>
         </div>
         
       </div>

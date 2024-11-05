@@ -57,7 +57,7 @@ function App() {
           submitted: true,
           semester: 'Spring 2024',
           status: 'Pending Review',
-          dateSubmitted: '2023-09-01',
+          dateSubmitted: 'October 31, 2024',
           classStanding: 'Junior',
           priority: null,
         },
@@ -66,8 +66,8 @@ function App() {
           graduatingSemester: 'Spring 2025',
           ufGpa: '3.5',
           ufId: '1234-5678',
-          name: 'Student 1',
-          email: 'student1@ufl.edu',
+          name: 'Student 2',
+          email: 'student2@ufl.edu',
           countryOfOrigin: 'USA',
           coursePreferences: ["COP3502C - Programming Fundamentals 1", 
           "COP3503C - Programming Fundamentals 2", 
@@ -80,7 +80,7 @@ function App() {
           submitted: true,
           semester: 'Spring 2024',
           status: 'Pending Review',
-          dateSubmitted: '2023-09-01',
+          dateSubmitted: 'October 28, 2024',
           classStanding: 'Senior',
           priority: null,
         },
@@ -89,8 +89,8 @@ function App() {
           graduatingSemester: 'Fall 2026',
           ufGpa: '3.3',
           ufId: '1234-5678',
-          name: 'Student 1',
-          email: 'student1@ufl.edu',
+          name: 'Student 3',
+          email: 'student3@ufl.edu',
           countryOfOrigin: 'USA',
           coursePreferences: ["CIS4301 - Information and Database Systems",
     "CIS4914 - Senior Project", 
@@ -100,7 +100,7 @@ function App() {
           submitted: true,
           semester: 'Spring 2024',
           status: 'Pending Review',
-          dateSubmitted: '2023-09-01',
+          dateSubmitted: 'October 27, 2024',
           classStanding: 'Sophomore',
           priority: null,
         },
@@ -119,13 +119,13 @@ function App() {
           <Route path="/student-home" element={<StudentHome />} />
           <Route path="/professor-home" element={<ProfessorHome />} />
           <Route path="/system-admin-home" element={<SystemAdminHome />} />
-          <Route path="/student-manager" element={<StudentManager />} />
+          <Route path="/application-manager" element={<StudentManager />} />
           <Route path="/course-editor" element={<CourseEditor />} />
           <Route path="/course-manager" element={<CourseManager />} />
           <Route path="/course/COP4600" element={<Course />} />
           <Route path="/course/COP4600/review" element={<AppReview />} />
           <Route path="/applications/fall-2024" element={<PrevApplication />} />
-          <Route path="/approve-application" element={<ApproveApplication />} />
+          <Route path="/review-applications" element={<ApproveApplication />} />
           <Route path="/assign-student" element={<AssignStudent />} />
           <Route path="/apply" element={<Apply />} />
         </Routes>

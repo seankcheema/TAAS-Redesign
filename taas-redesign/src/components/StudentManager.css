@@ -28,10 +28,14 @@
   cursor: pointer;
   background-color: #365798;
   color: white;
-  font-weight: bold;
   font-size: 1rem;
-  width: 150px;
-  margin-right: 100px;
+  width: auto;
+}
+
+.filter-btn-container{
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .filter-btn:hover {
@@ -77,14 +81,14 @@ h1{
 
 .form-group-sys-add label {
   font-weight: bold;
-  font-size: 1.6em; /* Increase font size of the label */
+  font-size: 1.2em; /* Increase font size of the label */
   white-space: nowrap; /* Ensure the label stays on one line */
 }
 
 .form-group-sys-add select {
   padding: 10px; /* Add padding for a larger dropdown */
   font-size: 1.2em; /* Increase font size of dropdown text */
-  width: 200px; /* Set a wider width for the dropdown */
+  width: auto; /* Set a wider width for the dropdown */
   border: 1px solid #ccc;
   border-radius: 4px;
 }

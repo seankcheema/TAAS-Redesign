@@ -51,14 +51,14 @@ h1{
 
 .form-group-sys-add label {
   font-weight: bold;
-  font-size: 1.6em; /* Increase font size of the label */
+  font-size: 1.2em; /* Increase font size of the label */
   white-space: nowrap; /* Ensure the label stays on one line */
 }
 
 .form-group-sys-add select {
   padding: 10px; /* Add padding for a larger dropdown */
   font-size: 1.2em; /* Increase font size of dropdown text */
-  width: 200px; /* Set a wider width for the dropdown */
+  width: auto; /* Set a wider width for the dropdown */
   border: 1px solid #ccc;
   border-radius: 4px;
 }
@@ -87,3 +87,47 @@ h1{
   background-color: #00509e; /* Hover effect */
 }
 
+/* Sidebar styling */
+.sidebar {
+  width: 250px;
+  padding: 1rem;
+  background-color: #f4f4f4;
+  border: 1px solid #000000;
+  position: absolute; /* Use absolute positioning */
+  top: 10px; /* Align to the top */
+  right: 10px; /* Align to the right */
+  bottom: 0; /* Ensure it stretches to the bottom */
+  height: 50%;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.sidebar h2 {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.application-item {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.orange-dot {
+  background-color: orange;
+}
+
+.green-check {
+  background-color: green;
+}
+
+.assignment-selection {
+  width: auto;
+}
