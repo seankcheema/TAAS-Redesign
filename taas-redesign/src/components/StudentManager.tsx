@@ -67,9 +67,7 @@ const StudentManager: React.FC = () =>{
         <table>
             <thead>
               <tr>
-                <th>#</th>
                 <th>Name</th>
-                <th>Student Status</th>
                 <th>Application Status</th>
                 <th>Last Updated</th>
               </tr>
@@ -79,9 +77,7 @@ const StudentManager: React.FC = () =>{
             <tr onClick={(event) =>
               handleRowClick(event, index, application.student_ufl_email)
             } key={index}>
-              <td>{index + 1}</td> {/* Display index starting from 1 */}
               <td>{application.student_name}</td>
-              <td>Undergraduate</td>
               <td>{application.student_status}</td>
               <td>{application.date_added}</td>
             </tr>

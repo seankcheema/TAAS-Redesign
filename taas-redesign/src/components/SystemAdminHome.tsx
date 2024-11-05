@@ -48,8 +48,20 @@ const SystemAdminHome: React.FC = () => {
   });
 
   const [urgentApplications, setUrgentApplicationsData] = useState<UrgentApplication[]>(() => {
-    const urgentApplications = localStorage.getItem('urgentapplications');
-    return urgentApplications ? JSON.parse(urgentApplications) : [];
+    const storedApplications = localStorage.getItem('applicationsData');
+    if (storedApplications) {
+      const applications: Application[] = JSON.parse(storedApplications);
+      // Filter applications for urgent applications
+      return applications
+        .filter(app => app.status === 'Pending Review')
+        .map(app => ({
+          student_name: app.name, 
+          student_ufl_email: app.email, 
+          student_status: app.status,
+          date_added: app.dateSubmitted, 
+        }));
+    }
+    return [];
   });
 
   const [courses, setCourses] = useState<Course[]>(() => {
