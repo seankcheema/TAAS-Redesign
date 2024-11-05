@@ -3,23 +3,7 @@ import './AppReview.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
-
-interface Application {
-  semesterAdmitted: string;
-  graduatingSemester: string;
-  ufGpa: string;
-  ufId: string;
-  countryOfOrigin: string;
-  coursePreferences: string[];
-  researchInterests: string;
-  travelPlans: string;
-  submitted?: boolean;
-  semester: string;
-  status: string;
-  dateSubmitted: string;
-  classStanding: string;
-  priority: number | null;
-}
+import { Application } from './Apply';
 
 
 const AppReview: React.FC = () => {
@@ -80,9 +64,9 @@ const AppReview: React.FC = () => {
     setPrioritySortOrder(prioritySortOrder === 'asc' ? 'desc' : 'asc');
   };
 
-  const handlePriorityChange = (ufId: string, priority: number | null) => {
+  const handlePriorityChange = (email: string, priority: number | null) => {
     const updatedApplications = applications.map(app =>
-      app.ufId === ufId ? { ...app, priority } : app
+      app.email === email ? { ...app, priority } : app
     );
     setApplications(updatedApplications);
     setPreferencesSaved(false);
@@ -114,8 +98,8 @@ const AppReview: React.FC = () => {
           <table>
             <thead>
               <tr>
-                <th className="name-column">UF ID</th>
-                <th className="email-column">Country</th>
+                <th className="name-column">Name</th>
+                <th className="email-column">Email</th>
                 <th className="gpa-column" onClick={handleSortByGpa}>
                   GPA {gpaSortOrder === 'asc' ? '▲' : '▼'}
                 </th>
@@ -133,8 +117,8 @@ const AppReview: React.FC = () => {
             <tbody>
               {applications.map(app => (
                 <tr key={app.ufId}>
-                  <td className="name-column">{app.ufId}</td>
-                  <td className="email-column">{app.countryOfOrigin}</td>
+                  <td className="name-column">{app.name}</td>
+                  <td className="email-column">{app.email}</td>
                   <td className="gpa-column">{parseFloat(app.ufGpa).toFixed(2)}</td>
                   <td className="standing-column">{app.classStanding}</td>
                   <td className="semester-column">{app.graduatingSemester}</td>
@@ -144,7 +128,7 @@ const AppReview: React.FC = () => {
                     <select
                       className="priority-dropdown"
                       value={app.priority ?? ''}
-                      onChange={(e) => handlePriorityChange(app.ufId, e.target.value ? parseInt(e.target.value) : null)}
+                      onChange={(e) => handlePriorityChange(app.email, e.target.value ? parseInt(e.target.value) : null)}
                     >
                       <option value="">Select</option>
                       <option value="1">1 - High</option>
