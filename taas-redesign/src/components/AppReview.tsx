@@ -151,7 +151,6 @@ const AppReview: React.FC = () => {
               Submit Preferences
             </button>
           </div>
-          {preferencesSaved && <div>Preferences saved!</div>}
         </div>
       </div>
       <Footer />
