@@ -80,7 +80,6 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      font-weight: bold;
       font-size: 1rem;
   }
   
@@ -98,7 +97,6 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-weight: bold;
     font-size: 1rem;
 }
 

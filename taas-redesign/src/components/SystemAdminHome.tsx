@@ -3,6 +3,8 @@ import './SystemAdminHome.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
+import { Application } from './Apply';
+
 
 export interface UrgentApplication {
   student_name: string;
@@ -14,159 +16,136 @@ export interface UrgentApplication {
 export interface Course {
   prefix: string;
   title: string;
-  professors_assigned: string;
-  tas_assigned: string;
-  enrollment: number;
+  professors_assigned: string[];
+  tas_assigned: string[];
+  capacity: number;
   date_added: string;
 }
 
-// <td><th>Prefix</th>
-// <td><th>Title</th>
-// <td><th>Enrollment</th>
-// <td><th>Date Added</th>
-// </tr>
-// <tr>
-// <td>COP4600</td>
-// <td>Operating Systems</td>
-// <td>103</td>
-// <td>2:10PM, October 28, 2024</td>
-// </tr>
-// <tr>
-// <td>COP4533</td>
-// <td>Algorithm Abstraction and Design</td>
-// <td>270</td>
-// <td>2:10PM, October 28, 2024</td>
-
 const SystemAdminHome: React.FC = () => {
-  const [urgentapplications, setApplications] = useState<UrgentApplication[]>(() => {
-    // Retrieve applications from localStorage or use default values
-    const storedApplications = localStorage.getItem('urgentapplications');
-    return storedApplications ? JSON.parse(storedApplications) : [
-      { student_name: "Jim Beam", student_ufl_email: "jimbeam@ufl.edu", student_status: "Application Approval Needed", date_added: "2:20PM, October 28, 2024" },
-      { student_name: "John Deer", student_ufl_email: "johndeer@ufl.edu", student_status: "Approved", date_added: "2:10PM, October 28, 2024" },
-      { student_name: "Jack Daniels", student_ufl_email: "jackdaniels@ufl.edu", student_status: "Application Approval Needed", date_added: "1:10PM, October 28, 2024" },
-      { student_name: "Jill Hill", student_ufl_email: "jillhill@ufl.edu", student_status: "Rejected", date_added: "1:10PM, October 28, 2024" },
-      { student_name: "Jane Doe", student_ufl_email: "janedoe@ufl.edu", student_status: "Application Approval Needed", date_added: "12:00PM, October 28, 2024" },
-      { student_name: "Test Man", student_ufl_email: "testman@ufl.edu", student_status: "Application Approval Needed", date_added: "12:00PM, October 28, 2024" },
-    ];
+
+
+  const [applicationsData, setApplicationsData] = useState<Application[]>(() => {
+    const storedApplications = localStorage.getItem('applicationsData');
+    return storedApplications ? JSON.parse(storedApplications) : [];
   });
+
+  const [urgentApplications, setUrgentApplicationsData] = useState<UrgentApplication[]>(() => {
+    const storedApplications = localStorage.getItem('applicationsData');
+    if (storedApplications) {
+      const applications: Application[] = JSON.parse(storedApplications);
+      // Filter applications for urgent applications
+      return applications
+        .filter(app => app.status === 'Pending Review')
+        .map(app => ({
+          student_name: app.name, 
+          student_ufl_email: app.email, 
+          student_status: app.status,
+          date_added: app.dateSubmitted, 
+        }));
+    }
+    return [];
+  });
+
+  localStorage.setItem('urgentapplications', JSON.stringify(urgentApplications));
 
   const [courses, setCourses] = useState<Course[]>(() => {
-    // Retrieve applications from localStorage or use default values
-    const courses = localStorage.getItem('courses');
-    return courses ? JSON.parse(courses) : [
-      { prefix: "CIS4301", title: "Databases", professors_assigned: "", tas_assigned: "", enrollment: 110, date_added: "2:20PM, October 28, 2024" },
-      { prefix: "COT3100", title: "Discrete Math", professors_assigned: "", tas_assigned: "", enrollment: 250, date_added: "2:10PM, October 28, 2024" },
-      { prefix: "COP4600", title: "Operating Systems", professors_assigned: "Alexis Seguro", tas_assigned: "", enrollment: 110, date_added: "2:20PM, October 28, 2024" },
+    const storedCourses = localStorage.getItem('courses');
+    return storedCourses ? JSON.parse(storedCourses) : [
+      {title: "CIS4301 - Information and Database Systems", professors_assigned: [], tas_assigned: "", capacity: 12, date_added: "October 28, 2024" },
+      {title: "COT3100 - Applications of Discrete Structures", professors_assigned: [], tas_assigned: "", capacity: 15, date_added: "October 28, 2024" },
+      {title: "COP4600 - Operating Systems", professors_assigned: ["Alexandre Gomes de Siqueira"], tas_assigned: "", capacity: 22, date_added: "October 28, 2024" },
     ];
   });
+
+  
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Store applications in localStorage whenever they change
-    localStorage.setItem('urgentapplications', JSON.stringify(urgentapplications));
+    localStorage.setItem('applicationsData', JSON.stringify(applicationsData));
     localStorage.setItem('courses', JSON.stringify(courses));
-  }, [urgentapplications, courses]);
+
+    // Filter applications with status "Pending Review" and store them as urgentApplications
+    localStorage.setItem('urgentapplications', JSON.stringify(urgentApplications));
+  }, [applicationsData, courses]);
 
   const handleAllTAs = () => {
-    navigate('/student-manager');    
+    navigate('/application-manager');    
   };
 
   const handleAllCourses = () => {
     navigate('/course-manager');    
   };
 
-  // Filter applications to exclude Approved and Rejected statuses
-  const filteredApplications = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
-  const filteredCourses = courses.filter(course => course.professors_assigned === "");
-
-  const handleRowClick = (index: number, tableType: "applications" | "courses", value: string) => {
-    if (tableType === "applications") {
-      
-      const currentStudent = urgentapplications.filter(app => app.student_name === value);
-
-      const selectedApplications = urgentapplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
+  const handleReview = (index: number, value: string) => {
+    // Find the selected application directly from the urgentApplications
+    const selectedApplication = urgentApplications.find(app => app.student_ufl_email === value);
+  
+    if (selectedApplication) {
+      const selectedApplications = urgentApplications.filter(app => app.student_status !== "Approved" && app.student_status !== "Rejected");
       localStorage.setItem("filteredApps", JSON.stringify(selectedApplications));
-
       localStorage.setItem("currentTableEntryCount", (selectedApplications.length).toString()); // Store the count in localStorage
       localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
       localStorage.setItem("previousPage", "System-Admin-Home");
+  
+      // Store the current application based on the selected application found
+      localStorage.setItem("currentApp", JSON.stringify(selectedApplication));
+  
+      navigate(`/review-applications`);
+    } else {
+      alert("Application not found.");
+    }
+  };
+  
 
-      localStorage.setItem("currentApp", JSON.stringify(selectedApplications[index+1]));
-      if(currentStudent[0].student_status === "Application Approval Needed"){
-        navigate(`/approve-application`); // Use index + 1 for the route
-      }
-      else{
-        navigate(`/assign-student`);
-      }
-      
-    } else if (tableType === "courses"){
+  const handleCourseReview = (index: number, value: string) => {
       const selectedCourses = courses.filter(course => course.title === value);
       localStorage.setItem("currentCourse", JSON.stringify(selectedCourses[0]));
 
       localStorage.setItem("courses", JSON.stringify(courses));
-
-      const unassignedCourses = courses.filter(course => course.professors_assigned === "");
-      localStorage.setItem("filteredCourses", JSON.stringify(unassignedCourses));
-
-      const rowCount = courses.filter(course => course.professors_assigned === "").length;
-      localStorage.setItem("currentTableEntryCount", rowCount.toString()); // Store the count in localStorage
       localStorage.setItem("currentRow", index.toString()); // Store the count in localStorage
       localStorage.setItem("previousPage", "System-Admin-Home");
-      navigate(`/course-editor/`); // Use index + 1 for the route
-    }
+      navigate(`/course-editor/`); // Use index + 1 for the route 
   };
 
-  
 
   return (
     <div className="ta-assignment-container">
       <Header />
 
       <div className="content">
-        {/* Apply Now Section */}
-        <div className="update-system-section">
-          <h2>Update System</h2>
-          <p>
-            Make changes to the system, including adding new professors, updating course information, 
-            setting deadline for applications, sending notifications, and exporting data.
-          </p>
-          <div className="button-container">
-            <button className="square-btn">Modify System</button>
-            <button className="square-btn">Add New Professors</button>
-            <button className="square-btn">Update Course Information</button>
-            <button className="square-btn">Sent Notifications</button>
-          </div>
-        </div>
-
         {/* Manage TA Applications Section */}
         <div className="manage-section">
           <h2>Manage TA Applications</h2>
           <p>
-            Update the status of applying students who need action.
+            Update the status of applying students who need action. There are currently <a>{urgentApplications.length}</a> applications that require review.
           </p>
           <table>
             <thead>
               <tr>
-                <th>#</th>
                 <th>Name</th>
                 <th>Status</th>
-                <th>Date Added</th>
+                <th>Date Submitted</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredApplications.map((application, index) => (
-                <tr key={index} onClick={() => handleRowClick(index, "applications", application.student_name)}> 
-                  <td>{index + 1}</td> {/* Display index starting from 1 */}
-                  <td>{application.student_name}</td>
-                  <td>{application.student_status}</td>
-                  <td>{application.date_added}</td>
+            {urgentApplications
+              .slice(0, 3)
+              .map((UA, index) => (
+                <tr key={index}>
+                  <td>{UA.student_name}</td>
+                  <td>{UA.student_status}</td>
+                  <td>{UA.date_added}</td>
+                  <td>
+                    <button className="review-btn" onClick={() => handleReview(index, UA.student_ufl_email)}>Review</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button className="wider-btn" onClick={handleAllTAs}>All TA Applications</button>
+          <button className="wider-btn" onClick={handleAllTAs}>Show All TA Applications</button>
         </div>
 
         {/* Professor-Course Assignment Section */}
@@ -178,26 +157,26 @@ const SystemAdminHome: React.FC = () => {
           <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Prefix</th>
-                <th>Title</th>
-                <th>Enrollment</th>
-                <th>Date Added</th>
+                <th>Course</th>
+                <th>Professors Assigned</th>
+                <th>Capacity</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
-            {filteredCourses.map((course, index) => (
-                <tr key={index} onClick={() => handleRowClick(index, "courses", course.title)}>  
-                  <td>{index + 1}</td> {/* Display index starting from 1 */}
-                  <td>{course.prefix}</td>
+              {courses.map((course, index) => (
+                <tr key={index}>
                   <td>{course.title}</td>
-                  <td>{course.enrollment}</td>
-                  <td>{course.date_added}</td>
+                  <td>{course.professors_assigned.join(', ')}</td>
+                  <td>{course.capacity}</td>
+                  <td>
+                    <button className="review-btn" onClick={() => handleCourseReview(index, course.title)}>Review</button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <button className="wider-btn" onClick={handleAllCourses}>All Professor Assignments </button>
+          <button className="wider-btn" onClick={handleAllCourses}>Show All Professor Assignments</button>
         </div>
         
       </div>

@@ -3,65 +3,40 @@ import './Apply.css';
 import Header from './Header';
 import Footer from './Footer';
 import { useNavigate } from 'react-router-dom';
-import {Course} from './SystemAdminHome'
-
-export interface Application {
-    semesterAdmitted: string;
-    graduatingSemester: string;
-    ufGpa: string;
-    ufId: string;
-    countryOfOrigin: string;
-    coursePreferences: string[];
-    researchInterests: string;
-    travelPlans: string;
-    submitted?: boolean;
-    semester: string;
-    status: string;
-    dateSubmitted: string;
-    classStanding: string;
-}
+import {Course} from './SystemAdminHome';
+import {Application} from './Apply';
 
 const CourseEditor: React.FC = () => {
   // Example list of professors for the dropdown
-  const professorOptions = ["Dr. Smith", "Prof. Johnson", "Dr. Lee", "Prof. Martinez", "Dr. Brown"];
-  const taOptions = ["TA Jane", "TA John", "TA Emma", "TA Lucas", "TA Olivia"];
-  const tableEntryCount = localStorage.getItem('currentTableEntryCount');
+  const professorOptions = [
+    "Alper Yilmaz",
+    "Anil K. Jain",
+    "Dapeng Oliver Wu",
+    "Daisy Zhe Wang",
+    "Jose Fortes",
+    "Juan E. Gilbert",
+    "Lisa Anthony",
+    "Muhammad Al Saad",
+    "Panos Ipeirotis",
+    "Peter Dobbins",
+    "Prabhat Mishra",
+    "Sanjay Ranka",
+    "Shahin Kamali",
+    "Sumi Helal",
+    "Yuguang Fang",
+    "Zhe He",
+    "Alexandre Gomes Siqueira"
+  ];
   const rowNumber = localStorage.getItem('currentRow');
   const rowNumberVal = Number(rowNumber);
   const previousPage = localStorage.getItem('previousPage');
 
-  const [application, setApplication] = useState<Application>({
-    semesterAdmitted: '',
-    graduatingSemester: '',
-    ufGpa: '',
-    ufId: '',
-    countryOfOrigin: '',
-    coursePreferences: Array(5).fill(''),
-    researchInterests: '',
-    travelPlans: '',
-    submitted: false,
-    semester: 'Spring 2025',
-    status: 'In Progress',
-    dateSubmitted: '',
-    classStanding: '', // Initialize class standing
-});
-
 // Load application data from localStorage on initial render
-const [urgentCourses, setUrgentApplications] = useState<Course[]>(() => {
+const [courses, setCourses] = useState<Course[]>(() => {
   const storedCourses = localStorage.getItem('courses');
   if (storedCourses) {
     const parsedCourses = JSON.parse(storedCourses);
     return parsedCourses;
-  }
-  return null; // Return null if no applications found
-});
-
-// Load application data from localStorage on initial render
-const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
-  const storedFilteredCourses = localStorage.getItem('filteredCourses');
-  if (storedFilteredCourses) {
-    const parsedApplications = JSON.parse(storedFilteredCourses);
-    return parsedApplications;
   }
   return null; // Return null if no applications found
 });
@@ -73,13 +48,38 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
     return savedCourse ? JSON.parse(savedCourse) : null;
   });
 
-  // Separate state for professors and TAs
-  const [professorList, setProfessorList] = useState<string[]>(() =>
-    course.professors_assigned ? course.professors_assigned.split(',').map(name => name.trim()) : []
+  const [taList, setTAList] = useState<string[]>(() => {
+    // Retrieve tas_assigned from current course
+    return course.tas_assigned || [];
+  });
+  
+
+  const [taEmails, setTAEmails] = useState<string[]>(() => {
+    // Retrieve applicationsData from localStorage
+      const applications = localStorage.getItem('applicationsData');
+      if (applications) {
+        const applicationsData = JSON.parse(applications);
+
+        // Filter and map assignments based on matching course.title
+        interface ApplicationData {
+          assignment: string;
+          email: string;
+        }
+
+        const matchingAssignments: string[] = (applicationsData as ApplicationData[])
+          .filter((app: ApplicationData) => app.assignment === course.title)
+          .map((app: ApplicationData) => app.email);
+        
+        return matchingAssignments;
+      }
+      return [];
+  }
   );
 
-  const [taList, setTAList] = useState<string[]>(() =>
-    course.tas_assigned ? course.tas_assigned.split(',').map(name => name.trim()) : []
+  const [professorList, setProfessorList] = useState<string[]>(() => {
+    // Get professors_assigned from current course
+    return course.professors_assigned;
+  }
   );
 
   const [isAddingProfessor, setIsAddingProfessor] = useState(false);
@@ -87,17 +87,6 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
   
   const [isAddingTA, setIsAddingTA] = useState(false);
   const [newTA, setNewTA] = useState("");
-
-  // Update localStorage whenever professorList or taList changes
-  useEffect(() => {
-    const updatedCourse = { 
-      ...course, 
-      professors: professorList.join(', '), 
-      tas: taList.join(', ') 
-    };
-    setCourse(updatedCourse);
-    localStorage.setItem('currentCourse', JSON.stringify(updatedCourse));
-  }, [professorList, taList]);
 
   const handleRemoveProfessor = (index: number) => {
     // Remove the professor at the specified index
@@ -116,114 +105,49 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
 
   const handleConfirmProfessor = () => {
     if (newProfessor) {
-      setProfessorList([...professorList, newProfessor]);
+      const updatedList = [...professorList, newProfessor];
+      setProfessorList(updatedList);
+  
+      // Create a new updated course object with the new professor list
+      const updatedCourse = { ...course, professors_assigned: updatedList };
+      setCourse(updatedCourse);
+  
       setIsAddingProfessor(false);
       setNewProfessor("");
     }
   };
   
-  // Handle Add, Confirm, and Remove for TAs
-  const handleAddTA = () => {
-    setIsAddingTA(true);
-    setNewTA("");
-  };
-
-  const handleConfirmTA = () => {
-    if (newTA) {
-      setTAList([...taList, newTA]);
-      setIsAddingTA(false);
-      setNewTA("");
-    }
-  };
-
-  const handleTASelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setNewTA(event.target.value);
-  };
-
-  const handleRemoveTA = (index: number) => {
-    const updatedList = taList.filter((_, i) => i !== index);
-    setTAList(updatedList);
+  
+   
+  const handleInputChange = (value: string) => {
+    // Update course's capacity as a string for smooth editing
+    setCourse({ ...course, capacity: Number(value) });
   };
   
-
-  const handleInputChange = (key: keyof Application, value: string) => {
-    setApplication((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-
-  // Load application data from localStorage on initial render
-  const [courses, setCourses] = useState<Course[]>(() => {
-    const storedCourses = localStorage.getItem('courses');
-    if (storedCourses) {
-      const parsedCourses = JSON.parse(storedCourses);
-      return parsedCourses;
-    }
-    return null; // Return null if no applications found
-  });
+  
 
   const handleUpdateCourse = () => {
     if (course) {
-      // Join lists for professors and TAs to store as strings
-      course.professors_assigned = professorList.join(', ');
-      course.tas_assigned = taList.join(', ');
-
-      // Update the main courses list
-      const updatedCourses = courses.map((courseOriginal) => {
-        if (courseOriginal.prefix === course.prefix) {
-          return { ...courseOriginal, professors_assigned: course.professors_assigned, tas_assigned: course.tas_assigned };
-        }
-        return courseOriginal;
-      });
-      setCourses(updatedCourses);
-      localStorage.setItem('courses', JSON.stringify(updatedCourses));
+      // Parse capacity as an integer before saving, default to 0 if parsing fails  
+      const courseIndex = courses.findIndex((c) => c.title === course.title);
   
-      // Update filteredCourses only if we're on the System Admin Home page
-      if (previousPage === "System-Admin-Home") {
-        const updatedFilteredCourses = filteredCourses.map((courseO) => {
-          if (course.prefix === courseO.prefix) {
-            return { ...courseO, professors_assigned: course.professors_assigned, tas_assigned: course.tas_assigned };
-          }
-          return courseO;
-        });
-        const newFiltered = updatedFilteredCourses.filter(course => course.professors_assigned === "");
-        setFilteredCourses(newFiltered);
-        localStorage.setItem('filteredCourses', JSON.stringify(newFiltered));
-        setCourse(newFiltered[0]);
-        localStorage.setItem('currentCourse', JSON.stringify(newFiltered[0]));
+      if (courseIndex !== -1) {
+        const updatedCourses = [...courses];
+        updatedCourses[courseIndex] = course;
+  
+        setCourses(updatedCourses);
+        localStorage.setItem('courses', JSON.stringify(updatedCourses));
+        localStorage.setItem('currentCourse', JSON.stringify(course));
+        alert('Course updated successfully.');
       }
-      
-
-      if(previousPage === "System-Admin-Home"){
-        const newCount = (Number(tableEntryCount) - 1);
-
-        var value = 0;
-
-        if(rowNumberVal >= newCount){
-          localStorage.setItem('currentRow', (Number(tableEntryCount) - 2).toString());
-          value = Number(tableEntryCount) - 2;
-          
-        }
-        else{
-          localStorage.setItem('currentCourse', JSON.stringify(filteredCourses[rowNumberVal]))
-          value = rowNumberVal;
-        }
-        localStorage.setItem('currentTableEntryCount', newCount.toString());
-        setProfessorList(filteredCourses[value].professors_assigned ? filteredCourses[value].professors_assigned.split(',').map(name => name.trim()) : []);
-        setTAList(filteredCourses[value].tas_assigned ? filteredCourses[value].tas_assigned.split(',').map(name => name.trim()) : []);
-      }
-  
-      navigate(`/course-editor`);
-      window.scrollTo(0, 0); // Scroll to top for better user experience
-  
-      alert('Course updated successfully.');
     }
   };
   
+  
+  
 
   const handleNext = () => {
-    if (Number(tableEntryCount) === rowNumberVal + 1) {
+    if (courses.length === rowNumberVal + 1) {
       alert('There are no next applications!'); // Notify user
     } else {
       const newIndex = rowNumberVal + 1;
@@ -231,14 +155,14 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
       
       let nextCourse: Course;
       if (previousPage === "System-Admin-Home") {
-        nextCourse = filteredCourses[newIndex];
+        nextCourse = courses[newIndex];
       } else {
-        nextCourse = urgentCourses[newIndex];
+        nextCourse = courses[newIndex];
       }
   
       setCourse(nextCourse);
-      setProfessorList(nextCourse.professors_assigned ? nextCourse.professors_assigned.split(',').map(name => name.trim()) : []);
-      setTAList(nextCourse.tas_assigned ? nextCourse.tas_assigned.split(',').map(name => name.trim()) : []);
+      setProfessorList(nextCourse.professors_assigned);
+      setTAList(nextCourse.tas_assigned || []); // Ensure tas_assigned is an array
       
       window.scrollTo(0, 0);
       navigate(`/course-editor`);
@@ -252,28 +176,25 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
       const newIndex = rowNumberVal - 1;
       localStorage.setItem("currentRow", newIndex.toString()); // Store the count in localStorage
   
-      let previousCourse: Course;
-      if (previousPage === "System-Admin-Home") {
-        previousCourse = filteredCourses[newIndex];
-      } else {
-        previousCourse = urgentCourses[newIndex];
-      }
-  
+      const previousCourse: Course = courses[newIndex]; // Fetch previous course
       setCourse(previousCourse);
-      setProfessorList(previousCourse.professors_assigned ? previousCourse.professors_assigned.split(',').map(name => name.trim()) : []);
-      setTAList(previousCourse.tas_assigned ? previousCourse.tas_assigned.split(',').map(name => name.trim()) : []);
+      setProfessorList(previousCourse.professors_assigned);
+      setTAList(previousCourse.tas_assigned || []); // Ensure tas_assigned is an array
       
       window.scrollTo(0, 0);
       navigate(`/course-editor`);
     }
   };
-
-  const handleConfirm = () => {
-  }
+  
 
  
   const handleBack = () => {
-    navigate('/system-admin-home');
+    if(previousPage === "System-Admin-Home"){
+      navigate('/system-admin-home');
+    }
+    else{
+      navigate('/course-manager');
+    }
   };
 
   return (
@@ -282,18 +203,14 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
       <img src="/assets/Arrow left.svg" alt="back-arrow" className='back-arrow' onClick={handleBack} />
       <div className="content">
         <div className="application-container">
-        <h2>{course.prefix} - {course.title} Information : Course {rowNumberVal + 1} / {tableEntryCount}</h2>
-        <p>Course Prefix: {course.prefix}</p>
-        <p>Course Name: {course.title}</p>
-        <p>Enrollment: {course.enrollment}</p>
+        <h2>{course.title} Information : Course {rowNumberVal + 1} / {courses.length}</h2>
           <form className="application-form">
             <div className="form-group">
               <label>TA Capacity</label>
               <input
                 type="text"
-                value={application.ufId}
-                onChange={(e) => handleInputChange('ufId', e.target.value)}
-                placeholder='22'
+                value={course.capacity}
+                onChange={(e) => handleInputChange(e.target.value)}
                 maxLength={2}
               />
             </div>
@@ -308,7 +225,6 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
               <table>
                 <thead>
                   <tr>
-                    <th>#</th>
                     <th>Professor Name</th>
                     <th>Action</th>
                   </tr>
@@ -316,7 +232,6 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
                 <tbody>
                   {professorList.map((professor, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
                       <td>{professor}</td>
                       <td>
                         <button className="submit-preferences-btn" onClick={() => handleRemoveProfessor(index)}>Remove</button>
@@ -325,7 +240,6 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
                   ))}
                   {isAddingProfessor && (
                     <tr>
-                      <td>{professorList.length + 1}</td>
                       <td>
                         <select value={newProfessor} onChange={handleProfessorSelection}>
                           <option value="">Select Professor</option>
@@ -346,56 +260,31 @@ const [filteredCourses, setFilteredCourses] = useState<Course[]>(() => {
             <div className="table-group" style={{marginTop: '50px', marginBottom: '50px'}}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2>Assigned TAs</h2>
-                <button className="submit-preferences-btn" onClick={handleAddTA} disabled={isAddingTA}>Add TA</button>
               </div>
               <table>
                 <thead>
                   <tr>
-                    <th>#</th>
                     <th>TA Name</th>
-                    <th>Action</th>
+                    <th>Email</th>
                   </tr>
                 </thead>
                 <tbody>
                   {taList.map((ta, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
                       <td>{ta}</td>
-                      <td>
-                        <button className="submit-preferences-btn" onClick={() => handleRemoveTA(index)}>Remove</button>
-                      </td>
+                      <td>{taEmails[index]}</td>
                     </tr>
                   ))}
-                  {isAddingTA && (
-                    <tr>
-                      <td>{professorList.length + 1}</td>
-                      <td>
-                        <select value={newTA} onChange={handleTASelection}>
-                          <option value="">Select TA</option>
-                          {taOptions.map((ta, index) => (
-                            <option key={index} value={ta}>{ta}</option>
-                          ))}
-                        </select>
-                      </td>
-                      <td>
-                        <button className="submit-preferences-btn" onClick={handleConfirmTA} disabled={!newTA}>Confirm</button>
-                      </td>
-                    </tr>
-                  )}
                 </tbody>
               </table>
             </div>
 
           </form>
-          <div className="button-group" style={{marginBottom: '100px'}}>
-            <button className="submit-preferences-btn" onClick={handleUpdateCourse}>Update Course</button>
-          </div>
           
           <div className="nav-button-group" style={{marginTop: '50px', marginBottom: '10px'}}>
-            <button className="navigation-btn" onClick={handleBack}>Exit</button>
-            <button className="navigation-btn" onClick={handlePrevious}>Previous Application</button>
-            <button className="navigation-btn" onClick={handleConfirm}>Confirm</button>
-            <button className="navigation-btn" onClick={handleNext}>Next Application</button>
+            <button className="navigation-btn" onClick={handlePrevious}>Previous Course</button>
+            <button className="navigation-btn" onClick={handleUpdateCourse}>Save Changes</button>
+            <button className="navigation-btn" onClick={handleNext}>Next Course</button>
           </div>
         </div>
         
